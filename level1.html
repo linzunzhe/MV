@@ -414,7 +414,7 @@ function init(){
   
   document.body.appendChild(renderer.domElement);
   window.addEventListener('resize', onWindowResize, false);
-  window.addEventListener('mousedown', onDocumentMouseDown, false);
+  window.addEventListener('touchstart', onDocumentTouchStart, false);
   window.addEventListener('mousemove', onDocumentMouseMove, false);
   
   var gridXZ = new THREE.GridHelper(200, 20, 'red', 'white');
@@ -546,7 +546,7 @@ function xxyy(point, adjVs){
   return pos;
 }
 
-function onDocumentMouseDown(event) {
+function onDocumentTouchStart(event) {
   event.preventDefault();
   // Normalized Device Coordinate (NDC): [-1,1]x[-1,1]
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;

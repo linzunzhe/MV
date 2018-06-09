@@ -549,8 +549,8 @@ function xxyy(point, adjVs){
 function onDocumentTouchStart(event) {
   event.preventDefault();
   // Normalized Device Coordinate (NDC): [-1,1]x[-1,1]
-  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  mouse.x = (event.touches[0].pageX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.touches[0].pageY / window.innerHeight) * 2 + 1;
 
   raycaster.setFromCamera(mouse, camera);
   var intersects = raycaster.intersectObjects(pickables);

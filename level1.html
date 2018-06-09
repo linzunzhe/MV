@@ -415,7 +415,7 @@ function init(){
   document.body.appendChild(renderer.domElement);
   window.addEventListener('resize', onWindowResize, false);
   window.addEventListener('touchstart', onDocumentTouchStart, false);
-  window.addEventListener('mousemove', onDocumentMouseMove, false);
+  window.addEventListener('touchmove', onDocumentTouchStart, false);
   
   var gridXZ = new THREE.GridHelper(200, 20, 'red', 'white');
   scene.add(gridXZ);

@@ -18,7 +18,7 @@
 </head>
 
 <body> 
-<div id="info">v4.3<br/>
+<div id="info">v5.0<br/>
 <button id = "turn">turn</button>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
@@ -30,12 +30,10 @@
   document.oncontextmenu = function() {
     return false;
   }
-
 </script>
 
 
 <script>
-
 var camera, scene, renderer;
 var halfSize = 80;
 var Lroad = new THREE.Object3D();
@@ -46,29 +44,44 @@ var raycaster = new THREE.Raycaster(), pickables = [];
 var vertex = [], edge = [], flag;
 var fp = 0, tp = 0, ft=1, ftx=0, speed=0.75;
 var road, road1, road2, road3, troad = [];
-var start, end;
-
-var ida;
+var start, end, on = false;
 
 var button;
 
+var ida;
+
 $('#turn').click(function() {
+	/*if(start.position.distanceTo(vertex[2].mesh.position) === 0){
+  console.log("bingo");
+  	fp = 4, tp = 4;
+    start.position.copy(vertex[2].mesh.position);
+    end.position.copy(vertex[2].mesh.position);
+    Matrix4Update(vertex[2].mesh.position,new THREE.Vector3(1,0,0),new THREE.Vector3(0,1,0));
+  }*/
 	if(Lxy >= 1 || Lxy <= 0)Lstate = (Lstate+1)%2;
   if(Lstate === 0){ 
   	Lxy = 1;
-    vertex[2].newAdjVs([1, 3]);
-    vertex[3].newAdjVs([2, 4]);
-    vertex[4].newAdjVs([3, 5]);
-    edge[2].mesh.position.x+=1000;
-  	edge[3].mesh.position.x+=1000;
+    if(start.position.distanceTo(vertex[2].mesh.position) === 0)fp = 4, tp = 4, on = true;
+    vertex[1].newAdjVs([0]);
+    vertex[2].newAdjVs([5]);
+    vertex[2].newPos([ 15, 30, -5]);
+    vertex[3].newAdjVs([4]);
+    vertex[5].newAdjVs([2, 6]);
+    edge[1].mesh.visible = false;
+  	edge[2].mesh.visible = false;
+    edge[4].mesh.visible = true;
   }
   else{
   	Lxy = 0;
-    vertex[2].newAdjVs([1]);
-    vertex[3].newAdjVs([]);
-    vertex[4].newAdjVs([5]);
-    edge[2].mesh.position.x-=1000;
-  	edge[3].mesh.position.x-=1000;
+    if(start.position.distanceTo(vertex[2].mesh.position) === 0)fp = 2, tp = 2, on = true;
+    vertex[1].newAdjVs([0, 2]);
+    vertex[2].newAdjVs([1, 3]);
+    vertex[2].newPos([ 15, -10, -5]);
+    vertex[3].newAdjVs([2, 4]);
+    vertex[5].newAdjVs([6]);
+    edge[1].mesh.visible = true;
+  	edge[2].mesh.visible = true;
+    edge[4].mesh.visible = false;
   }
 });
 
@@ -262,6 +275,9 @@ class Vertex{
   newAdjVs(adjvs){
   	this.adjVs = adjvs;
   }
+  newPos(pos){
+  	this.mesh.position.set(pos[0],pos[1],pos[2]);
+  }
 }
 
 class Edge{
@@ -277,20 +293,22 @@ class Edge{
 }
 
 function build_Vertex(){
-	vertex[0] = new Vertex(0, [ 25, -40, -5], [ 1]);
-  vertex[1] = new Vertex(1, [ -35, -40, -5], [ 0, 2]);
-  vertex[2] = new Vertex(2, [ -35, -40, -35], [ 1]);
-  vertex[3] = new Vertex(3, [ -35, -40, -75], []);
-  vertex[4] = new Vertex(4, [ -75, -40, -75], [ 5]);
-  vertex[5] = new Vertex(5, [ -105, -40, -75], [ 4]);
+	vertex[0] = new Vertex(0, [ -25, -10, -5], [ 1]);
+  vertex[1] = new Vertex(1, [ 5, -10, -5], [ 0, 2]);
+  vertex[2] = new Vertex(2, [ 15, -10, -5], [ 1, 3]);
+  vertex[3] = new Vertex(3, [ 25, -10, -5], [ 2, 4]);
+  vertex[4] = new Vertex(4, [ 35, -10, -5], [ 3]);
+  vertex[5] = new Vertex(5, [ 15, 30, -15], [ 6]);
+  vertex[6] = new Vertex(6, [ 75, 30, -15], [ 5]);
 }
 
 function build_Edge(){
-	edge[0] = new Edge(0, [-5, -40, -5], [70, 0.1, 10], [0, 1, 0],[0, 1]);
-  edge[1] = new Edge(1, [-35, -40, -20], [10, 0.1, 40], [0, 1, 0],[1, 2]);
-  edge[2] = new Edge(2, [-35, -40, -55], [10, 0.1, 50], [0, 1, 0],[2, 3]);
-  edge[3] = new Edge(3, [-55, -40, -75], [50, 0.1, 10], [0, 1, 0],[3, 4]);
-  edge[4] = new Edge(4, [-90, -40, -75], [40, 0.1, 10], [0, 1, 0],[4, 5]);
+	edge[0] = new Edge(0, [-10, -10, -5], [40, 0.1, 10], [0, 1, 0],[0, 1]);
+  edge[1] = new Edge(1, [10, -10, -5], [20, 0.1, 10], [0, 1, 0],[1, 2]);
+  edge[2] = new Edge(2, [20, -10, -5], [20, 0.1, 10], [0, 1, 0],[2, 3]);
+  edge[3] = new Edge(3, [30, -10, -5], [20, 0.1, 10], [0, 1, 0],[3, 4]);
+  edge[4] = new Edge(4, [15, 30, -10], [10, 0.1, 20], [0, 1, 0],[2, 5]);
+  edge[5] = new Edge(5, [45, 30, -15], [70, 0.1, 10], [0, 1, 0],[5, 6]);
 }
 
 function find_Road(from, to, visit){
@@ -345,21 +363,17 @@ function build_Road(){
 	var obj = new THREE.Object3D();
   var material = new THREE.MeshLambertMaterial({color: 0x0000ff});
   
-	var mesh1 = new THREE.Mesh(new THREE.BoxGeometry( 10, 40, 10), material);
-  mesh1.position.set( 35, -30, -5);
+	var mesh1 = new THREE.Mesh(new THREE.BoxGeometry( 70, 40, 10), material);
+  mesh1.position.set( 5, -30, -5);
   obj.add(mesh1);
   
-  var mesh2 = new THREE.Mesh(new THREE.BoxGeometry( 60, 10, 10), material);
-  mesh2.position.set( 0, -45, -5);
+  var mesh2 = new THREE.Mesh(new THREE.BoxGeometry( 10, 70, 80), material);
+  mesh2.position.set( -35, -15, -30);
   obj.add(mesh2);
   
-  var mesh3 = new THREE.Mesh(new THREE.BoxGeometry( 10, 10, 40), material);
-  mesh3.position.set( -35, -45, -20);
+  var mesh3 = new THREE.Mesh(new THREE.BoxGeometry( 70, 40, 10), material);
+  mesh3.position.set( 5, -30, -55);
   obj.add(mesh3);
-  
-  var mesh4 = new THREE.Mesh(new THREE.BoxGeometry( 40, 10, 10), material);
-  mesh4.position.set( -90, -45, -75);
-  obj.add(mesh4);
   
   scene.add(obj);
 }
@@ -368,20 +382,16 @@ function build_Road2(){
 	var obj = new THREE.Object3D();
   var material = new THREE.MeshLambertMaterial({color: 0x8888ff});
   
-  var mesh1 = new THREE.Mesh(new THREE.BoxGeometry( 40, 10, 10), material);
-  mesh1.position.set( -15, 0, 0);
+  var mesh1 = new THREE.Mesh(new THREE.BoxGeometry( 10, 40, 10), material);
+  mesh1.position.set( 15, 10, -5);
   obj.add(mesh1);
-  
-  var mesh2 = new THREE.Mesh(new THREE.BoxGeometry( 10, 10, 30), material);
-  mesh2.position.set( 0, 0, 20);
-  obj.add(mesh2);
   
   scene.add(obj);
   return obj;
 }
 
 function changeMode(){
-	if(Lxy >= 1 || Lxy <= 0)Lstate = (Lstate+1)%2;
+	/*if(Lxy >= 1 || Lxy <= 0)Lstate = (Lstate+1)%2;
   if(Lstate === 0){ 
   	Lxy = 1;
     vertex[2].newAdjVs([1, 3]);
@@ -399,7 +409,7 @@ function changeMode(){
     edge[2].mesh.position.x-=1000;
   	edge[3].mesh.position.x-=1000;
     button.material.color.set(0x888888);
-  }
+  }*/
 }
 
 function init(){
@@ -415,7 +425,7 @@ function init(){
   document.body.appendChild(renderer.domElement);
   window.addEventListener('resize', onWindowResize, false);
   window.addEventListener('touchstart', onDocumentTouchStart, false);
-  //window.addEventListener('touchmove', onDocumentTouchStart, false);
+  window.addEventListener('touchmove', onDocumentTouchStart, false);
   
   var gridXZ = new THREE.GridHelper(200, 20, 'red', 'white');
   scene.add(gridXZ);
@@ -435,18 +445,17 @@ function init(){
   build_Edge();
   ida = new Ida();
   
-  edge[2].mesh.position.x-=1000;
-  edge[3].mesh.position.x-=1000;
+  edge[4].mesh.visible = false;
   
-  flag = ida.ida;//buildplane();
-  flag.position.set(-5, -40, -5);
+  flag = ida.ida;
+  flag.position.set(-25, -10, -5);
   scene.add(flag);
   
    start = new THREE.Mesh( new THREE.SphereBufferGeometry( 1, 18, 18 ), new THREE.MeshBasicMaterial( {color: 0xff4400} ) );
-   start.position.set(-5, -40, -5);
+   start.position.set(-25, -10, -5);
    
    end = new THREE.Mesh( new THREE.SphereBufferGeometry( 1, 18, 18 ), new THREE.MeshBasicMaterial( {color: 0x000000} ) );
-   end.position.set(-5, -40, -5);
+   end.position.set(-25, -10, -5);
    scene.add(end);
    
    road = new roadLine();
@@ -454,23 +463,40 @@ function init(){
    road2 = new roadLine();
    road3 = new roadLine();
    
-   button = new THREE.Mesh(new THREE.BoxGeometry( 8, 2, 8), new THREE.MeshLambertMaterial({color: 0x888888}));
+   /*button = new THREE.Mesh(new THREE.BoxGeometry( 8, 2, 8), new THREE.MeshLambertMaterial({color: 0x888888}));
    button.position.set(25, -40, -5);
-   scene.add(button);
+   scene.add(button);*/
    
 }
 	
 function animate(){ 
 	if(Lstate === 0){
     if(Lxy > 0)Lxy -= 0.05;
-    Lroad.rotation.x = Math.PI*0.5*Lxy;
+    Lroad.position.y = -40 * Lxy;
+    if(on){
+    	start.position.y = Lroad.position.y + 30;
+    	Matrix4Update(start.position,new THREE.Vector3(1,0,0),new THREE.Vector3(0,1,0));
+      if(Lxy<=0){
+        on = false;
+        start.position.copy(vertex[2].mesh.position);
+        Matrix4Update(start.position,new THREE.Vector3(1,0,0),new THREE.Vector3(0,1,0));
+      }
+    }
   }
   else {
   	if(Lxy < 1)Lxy += 0.05;
-    Lroad.rotation.x = Math.PI*0.5*Lxy;
+    Lroad.position.y = -40 * Lxy;
+    if(on){
+    	start.position.y = Lroad.position.y + 30;
+    	Matrix4Update(start.position,new THREE.Vector3(1,0,0),new THREE.Vector3(0,1,0));
+      if(Lxy>=1){
+        on = false;
+        start.position.copy(vertex[2].mesh.position);
+        Matrix4Update(start.position,new THREE.Vector3(1,0,0),new THREE.Vector3(0,1,0));
+      }
+    }
+    
   }
-  if(Lxy < 0.5)Lroad.position.set( -35, -45, -75);
-  else Lroad.position.set( 35, 25, -5);
   
   if(ft < 1){
    		 ft += ftx;
@@ -479,7 +505,7 @@ function animate(){
        if(ft>=1){
        		fp=tp;
         	start.position.copy(end.position);
-        	if(start.position.distanceTo(new THREE.Vector3(25, -40, -5)) === 0){changeMode();}
+        	//if(start.position.distanceTo(new THREE.Vector3(25, -40, -5)) === 0){changeMode();}
        }
    }
    else ida.state = 0;
@@ -555,7 +581,7 @@ function onDocumentTouchStart(event) {
   raycaster.setFromCamera(mouse, camera);
   var intersects = raycaster.intersectObjects(pickables);
   if (intersects.length > 0) {
-      tp = intersects[0].object.name;
+    	tp = intersects[0].object.name;
       let pos = xxyy(intersects[0].point, edge[tp].adjVs);
       end.position.copy(pos);
       road = new roadLine();
@@ -630,9 +656,6 @@ function onDocumentMouseMove(event) {
     document.body.style.cursor = 'auto';
   }
 }
-
-
-
 </script>
 </body>
 

@@ -555,8 +555,7 @@ function onDocumentTouchStart(event) {
   raycaster.setFromCamera(mouse, camera);
   var intersects = raycaster.intersectObjects(pickables);
   if (intersects.length > 0) {
-  	if(event.button === 2){
-    	tp = intersects[0].object.name;
+      tp = intersects[0].object.name;
       let pos = xxyy(intersects[0].point, edge[tp].adjVs);
       end.position.copy(pos);
       road = new roadLine();
@@ -616,7 +615,6 @@ function onDocumentTouchStart(event) {
         ftx = speed/road.totallength;
         ft = 0;
       }
-    }
   }
 }
 

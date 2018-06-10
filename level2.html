@@ -564,6 +564,7 @@ function onDocumentTouchStart(event) {
 		$("#turn").text("" + tp);
 		if(tp === "obj"){
 			$("#turn").text("" + (newpos - oldpos) + " " + oldposs);
+			ida.visible = false;
 			if(oldposs === false){
 				oldpos = mouse.y;
 				oldposs = true;

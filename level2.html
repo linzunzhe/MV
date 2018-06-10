@@ -640,7 +640,8 @@ function onDocumentTouchMove(event){
 	raycaster.setFromCamera(mouse, camera);
 	var intersects = raycaster.intersectObjects(pickables);
 	if (intersects.length > 0) {
-		if(oldposs){
+		$("#turn").text("" + (newpos - oldpos));
+		if(oldposs === true){
 			newpos = mouse.y;
 			if(newpos - oldpos >= 20){
 				Lstate = 0;

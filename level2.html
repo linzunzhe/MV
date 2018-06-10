@@ -569,6 +569,7 @@ function onDocumentTouchStart(event) {
 			}
 			else if(oldposs === true){
 				newpos = mouse.y;
+				$("#turn").text("" + (newpos - oldpos));
 				if(newpos - oldpos >= 20){
 					Lstate = 0;
 					Lxy = 1;

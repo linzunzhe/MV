@@ -561,15 +561,13 @@ function onDocumentTouchStart(event) {
 	var intersects = raycaster.intersectObjects(pickables);
 	if (intersects.length > 0) {
 		tp = intersects[0].object.name;
-		$("#turn").text("" + tp);
 		if(tp === "obj"){
-			$("#turn").text("" + mouse.y);
 			if(oldposs === false){
-				oldpos = mouse.y;
+				oldpos = intersects[0].point.y;
 				oldposs = true;
 			}
 			else if(oldposs === true){
-				newpos = mouse.y;
+				newpos = intersects[0].point.y;
 				if(newpos - oldpos >= 20){
 					Lstate = 0;
 					Lxy = 1;

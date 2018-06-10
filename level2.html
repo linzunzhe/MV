@@ -561,7 +561,7 @@ function onDocumentTouchStart(event) {
 	var intersects = raycaster.intersectObjects(pickables);
 	if (intersects.length > 0) {
 		tp = intersects[0].object.name;
-		$("#turn").text(tp);
+		$("#turn").text("" + tp);
 		if(tp === "obj"){
 			flag.visible = false;
 		}

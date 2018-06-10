@@ -46,7 +46,7 @@ var fp = 0, tp = 0, ft=1, ftx=0, speed=0.75;
 var road, road1, road2, road3, troad = [];
 var start, end, on = false;
 
-var oldpos, nowpos;
+var oldpos, nowpos, oldposs = false;
 
 var ida;
 
@@ -380,11 +380,12 @@ function build_Road(){
 
 function build_Road2(){
 	var obj = new THREE.Object3D();
-	obj.name = "obj";
 	var material = new THREE.MeshLambertMaterial({color: 0x8888ff});
   
 	var mesh1 = new THREE.Mesh(new THREE.BoxGeometry( 10, 40, 10), material);
 	mesh1.position.set( 15, 10, -5);
+	mesh1.name = "obj";
+	pickables.push(mesh1);
 	obj.add(mesh1);
   
 	scene.add(obj);
@@ -420,7 +421,6 @@ function init(){
   
   build_Road();
   Lroad = build_Road2();
-  pickables.push(Lroad);
   build_Vertex();
   build_Edge();
   ida = new Ida();
@@ -561,11 +561,12 @@ function onDocumentTouchStart(event) {
 	var intersects = raycaster.intersectObjects(pickables);
 	if (intersects.length > 0) {
 		tp = intersects[0].object.name;
-		$("#turn").text("" + tp);
 		if(tp === "obj"){
-			flag.visible = false;
+			oldpos = mouse.y;
+			oldposs = true;
 		}
 		else{
+			oldposs = false;
 			let pos = xxyy(intersects[0].point, edge[tp].adjVs);
 			end.position.copy(pos);
 			road = new roadLine();
@@ -630,7 +631,44 @@ function onDocumentTouchStart(event) {
 }
 
 function onDocumentTouchMove(event){
-	
+	event.preventDefault();
+	// Normalized Device Coordinate (NDC): [-1,1]x[-1,1]
+	mouse.x = (event.touches[0].pageX / window.innerWidth) * 2 - 1;
+	mouse.y = -(event.touches[0].pageY / window.innerHeight) * 2 + 1;
+
+	raycaster.setFromCamera(mouse, camera);
+	var intersects = raycaster.intersectObjects(pickables);
+	if (intersects.length > 0) {
+		if(oldposs){
+			newpos = mouse.y;
+			if(newpos - oldpos >= 20){
+				Lstate = 0;
+				Lxy = 1;
+				if(start.position.distanceTo(vertex[2].mesh.position) === 0)fp = 4, tp = 4, on = true;
+				vertex[1].newAdjVs([0]);
+				vertex[2].newAdjVs([5]);
+				vertex[2].newPos([ 15, 30, -5]);
+				vertex[3].newAdjVs([4]);
+				vertex[5].newAdjVs([2, 6]);
+				edge[1].mesh.visible = false;
+				edge[2].mesh.visible = false;
+				edge[4].mesh.visible = true;
+			}
+			else if(newpos - oldpos <= -20){
+				Lstate = 1;
+				Lxy = 0;
+				if(start.position.distanceTo(vertex[2].mesh.position) === 0)fp = 2, tp = 2, on = true;
+				vertex[1].newAdjVs([0, 2]);
+				vertex[2].newAdjVs([1, 3]);
+				vertex[2].newPos([ 15, -10, -5]);
+				vertex[3].newAdjVs([2, 4]);
+				vertex[5].newAdjVs([6]);
+				edge[1].mesh.visible = true;
+				edge[2].mesh.visible = true;
+				edge[4].mesh.visible = false;
+			}
+		}
+	}
 }
 
 function onDocumentMouseMove(event) {

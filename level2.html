@@ -42,7 +42,7 @@ var Lstate = 1, Lxy = 1;
 var mouse = new THREE.Vector2();
 var raycaster = new THREE.Raycaster(), pickables = [];
 var vertex = [], edge = [], flag;
-var fp = 0, tp = 0, ft=1, ftx=0, speed=0.75;
+var fp = 0, tp = 0, ft=1, ftx=0, speed=0.50;
 var road, road1, road2, road3, troad = [];
 var start, end, on = false;
 
@@ -641,7 +641,7 @@ function onDocumentTouchMove(event){
 	if (intersects.length > 0) {
 		if(oldposs === true){
 			newpos = intersects[0].point.y;
-			if(newpos - oldpos >= 20){
+			if(newpos - oldpos >= 10){
 				Lstate = 0;
 				Lxy = 1;
 				if(start.position.distanceTo(vertex[2].mesh.position) === 0)fp = 4, tp = 4, on = true;
@@ -654,7 +654,7 @@ function onDocumentTouchMove(event){
 				edge[2].mesh.visible = false;
 				edge[4].mesh.visible = true;
 			}
-			else if(newpos - oldpos <= -20){
+			else if(newpos - oldpos <= -10){
 				Lstate = 1;
 				Lxy = 0;
 				if(start.position.distanceTo(vertex[2].mesh.position) === 0)fp = 2, tp = 2, on = true;

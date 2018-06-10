@@ -563,7 +563,7 @@ function onDocumentTouchStart(event) {
 		tp = intersects[0].object.name;
 		$("#turn").text("" + tp);
 		if(tp === "obj"){
-			$("#turn").text("" + oldposs);
+			$("#turn").text("" + mouse.y);
 			if(oldposs === false){
 				oldpos = mouse.y;
 				oldposs = true;

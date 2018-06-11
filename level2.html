@@ -641,7 +641,7 @@ function onDocumentTouchMove(event){
 	if (intersects.length > 0) {
 		if(oldposs === true){
 			newpos = intersects[0].point.y;
-			if(newpos - oldpos >= 10){
+			if(Lstate === 1 && newpos - oldpos >= 20){
 				Lstate = 0;
 				Lxy = 1;
 				if(start.position.distanceTo(vertex[2].mesh.position) === 0)fp = 4, tp = 4, on = true;
@@ -654,7 +654,7 @@ function onDocumentTouchMove(event){
 				edge[2].mesh.visible = false;
 				edge[4].mesh.visible = true;
 			}
-			else if(newpos - oldpos <= -10){
+			else if(Lstate === 0 && newpos - oldpos <= -20){
 				Lstate = 1;
 				Lxy = 0;
 				if(start.position.distanceTo(vertex[2].mesh.position) === 0)fp = 2, tp = 2, on = true;

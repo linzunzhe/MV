@@ -283,12 +283,8 @@ function init() {
 
     var gridXZ = new THREE.GridHelper(200, 20, 'red', 'white');
     //scene.add(gridXZ);
-    THREE.ImageUtils.crossOrigin = '';
     var floor = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshPhongMaterial({
-        color: 0xdddddd,
-        transparent: true, // key to cutout texture
-        map: THREE.ImageUtils.loadTexture('https://i.imgur.com/fbxMacv.jpg')
-    }));
+        color: 0x888888}));
     floor.rotation.x = -Math.PI / 2;
     scene.add(floor);
 

@@ -136,10 +136,15 @@ class Ball {
             let pos = balls[i].pos.clone().sub(bar.position.clone());
             let posb = bar.position.clone();
             let rad = balls[i].radius;
-            let bar_x = new THREE.Vector3(normalMat.elements[0], 0, normalMat.elements[2]);
-            let bar_z = new THREE.Vector3(normalMat.elements[6], 0, normalMat.elements[8]);
+            //let bar_x = bar.position.clone();
+            //let bar_y = bar.position.clone();
+            let bar_x = bar.localToWorld(new THREE.Vector3(1, 0, 0));
+            let bar_z = bar.localToWorld(new THREE.Vector3(0, 0, 1));
             let dx = Math.cos(angle)*(pos.x - posb.x) - Math.sin(angle)*(pos.z - posb.z) + posb.x;
             let dz = Math.cos(angle)*(pos.z - posb.z) + Math.sin(angle)*(pos.x - posb.x) + posb.z;
+            bar_x.sub(posb.clone()).normalize();
+            bar_z.sub(posb.clone()).normalize();
+            console.log(bar_x);
             if(hh < dz) {//上
             	if(ww < dx) {//左
                 	let x = ww - dx;
@@ -163,7 +168,7 @@ class Ball {
                     let y = hh + rad;
                     if(y >= dz) {
                     	let pp = [];
-                        let planeT = new Plane( new THREE.Vector3(0,0,hh), bar_z, bar);
+                        let planeT = new Plane( bar_z.clone().multiplyScalar(hh), bar_z, bar);
                         planeT.update();
                         pp.push(planeT);
                         balls[i].collidingPlanes(pp);
@@ -194,7 +199,7 @@ class Ball {
                         console.log(y+" "+rad)
                     if(y <= dz) {
                     	let pp = [];
-                        let planeT = new Plane( new THREE.Vector3(0,0,-hh), bar_z.clone().multiplyScalar(-1), bar);
+                        let planeT = new Plane( bar_z.clone().multiplyScalar(-hh), bar_z.clone().multiplyScalar(-1), bar);
                         planeT.update();
                         pp.push(planeT);
                         balls[i].collidingPlanes(pp);
@@ -206,7 +211,7 @@ class Ball {
                 	let x = ww + rad;
                     if(x >= dx) {
                     	let pp = [];
-                        let planeT = new Plane( new THREE.Vector3(ww,0,0), bar_x, bar);
+                        let planeT = new Plane( bar_x.clone().multiplyScalar(ww), bar_x, bar);
                         planeT.update();
                         pp.push(planeT);
                         balls[i].collidingPlanes(pp);
@@ -216,7 +221,7 @@ class Ball {
                 	let x = -ww - rad;
                     if(x <= dx) {
                     	let pp = [];
-                        let planeT = new Plane( new THREE.Vector3(-ww,0,0), bar_x.clone().multiplyScalar(-1), bar);
+                        let planeT = new Plane( bar_x.clone().multiplyScalar(-ww), bar_x.clone().multiplyScalar(-1), bar);
                         planeT.update();
                         pp.push(planeT);
                         balls[i].collidingPlanes(pp);

@@ -108,12 +108,14 @@
 <script src="mouse.js"></script>
 <script src="box.js"></script>
 <script src="click.js"></script>
+<script src="edge.js"></script>
 <script>
 var pickplane;
 var tbox, boxes;
 var state = "building"
 var billBoard;
 var grid;
+var bEdge;
 //window.focus();
 
 init();
@@ -173,6 +175,8 @@ function init() {
 	grid = new THREE.GridHelper(200, 20, 'red', 'yellow');
     scene.add(grid);
     grid.visible = false;
+	
+	bEdge = new buildEdge();
 }
 
 function animate() {

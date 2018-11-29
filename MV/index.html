@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+#container {
+  background: cyan;
+  position: absolute;
+  top: 0%;
+  left: 33.2%;
+  width: 50vw;
+  height: 60vh;
+}
+
+#container_w {
+  background: red;
+  position: absolute;
+  top: 59.5%;
+  left: 83.2%;
+  width: 16.8vw;
+  height: 40vh;
+}
+
+#container_x {
+  background: yellow;
+  position: absolute;
+  top: 49.5%;
+  left: 41.6%;
+  width: 41.6vw;
+  height: 50vh;
+}
+
+#container_y {
+  background: blue;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 41.6vw;
+  height: 50vh;
+}
+
+#container_z {
+  background: green;
+  position: absolute;
+  top: 49.5%;
+  left: 0%;
+  width: 41.6vw;
+  height: 50vh;
+}
+
+#info {
+  background: #eeeeee;
+  position: absolute;
+  top: 0%;
+  left: 83.2%;
+  width: 16.8vw;
+  height: 60vh;
+}
+
+</style>
+</head>
+<body>
+<!--  版面配置 -->
+<div id="container_w"></div>
+<div id="container_x"></div>
+<div id="container_y"></div>
+<div id="container_z"></div>
+<div id="container"></div>
+<div id="info">
+	<div style="border-width:2px;border-style:dashed;border-color:#FFAC55;">
+		<button id="building" style="width: 50px">build</button>
+		<button id="delete" style="width: 50px">delete</button>
+		<button id="stretch" style="width: 55px">stretch</button>
+		<button id="Sview" style="width: 50px">Sview</button>
+	</div>
+	<div style="border-width:2px;border-style:dashed;border-color:#55ACFF;">
+		<button id="move0" style="width: 50px">move0</button>
+		<button id="move1" style="width: 50px">move1</button>
+		<button id="move2" style="width: 50px">move2</button>
+		<button id="back" style="width: 50px">back</button>
+	</div>
+	<div style="border-width:2px;border-style:dashed;border-color:#55FFAC;">
+		<button id="edge" style="width: 50px">edge</button>
+	</div>
+	<div style="border-width:2px;border-style:dashed;border-color:#FF55AC;">
+		color
+		<div style = "margin-top: 5%; float: right;">
+			<div id = "colorBlock" style="background: hsl(240, 100%, 50%);width: 50px;height: 50px;"></div>
+			<div id = "styleBlock" style="background-image: url('https://i.imgur.com/DII1KaT.png'); background-size: contain; width: 50px; height: 50px;"></div>
+		</div>
+        <br/>H<input type=range id="colorH" style="width: 100px" min=0 max=360 step="any" value = 240>
+        <br/>S<input type=range id="colorS" style="width: 100px" min=0 max=1 step="any" value = 1>
+        <br/>L<input type=range id="colorL" style="width: 100px" min=0 max=1 step="any" value = 0.5>
+		<br/>style<select id = "style">
+			<option value = "https://i.imgur.com/DII1KaT.png">style0</option>
+			<option value = "https://i.imgur.com/ST5hHPT.png">style1</option>
+			<option value = "https://i.imgur.com/eNNeglC.png">style2</option>
+			<option value = "https://i.imgur.com/U6nuTOz.png">style3</option>
+		</style>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<!--MY.js-->
+<script src="scene.js"></script>
+<script src="mouse.js"></script>
+<script src="box.js"></script>
+<script src="click.js"></script>
+<script>
+var pickplane;
+var tbox, boxes;
+var state = "building"
+var billBoard;
+var grid;
+//window.focus();
+
+init();
+animate();
+
+function init() {
+	Scene();
+	window.addEventListener('resize', render, false);
+    renderer.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
+    renderer.domElement.addEventListener('mouseup', onDocumentMouseUp, false);
+    renderer.domElement.addEventListener('mousemove', onDocumentMouseMove, false);
+    //document.addEventListener('keydown', doKeyDown, false);
+	
+	/******光源********/
+    var lightmesh = new THREE.AmbientLight(0x444444);
+    scene.add(lightmesh);
+    var lightmesh2 = new THREE.DirectionalLight(0xcccccc, 0.9);
+    lightmesh2.position.set(100, 0, 0);
+	lightmesh2.target = scene;
+    scene.add(lightmesh2);
+    var lightmesh3 = new THREE.DirectionalLight(0xaaaaaa, 0.9);
+    lightmesh3.position.set(0, 0, 100);
+	lightmesh3.target = scene;
+    scene.add(lightmesh3);
+	var lightmesh3 = new THREE.DirectionalLight(0x999999, 0.9);
+    lightmesh3.position.set(0, 100, 0);
+	lightmesh3.target = scene;
+    scene.add(lightmesh3);
+	
+	/*others*/
+	tbox = new tBox();
+	boxes = new Box();
+	
+	pickplane = new THREE.Mesh(new THREE.BoxGeometry(220, 0.1, 220), new THREE.MeshNormalMaterial({
+		transparent: true,
+		opacity: 0.0
+	}));
+	scene.add(pickplane);
+	pickplane.name = "pickplane";
+	pickables.push(pickplane);
+	
+	gridXZ = new THREE.GridHelper(200, 20, 'red', 'white');
+    scene.add(gridXZ);
+	
+	THREE.ImageUtils.crossOrigin = '';
+    let material = new THREE.MeshBasicMaterial({
+        //side: THREE.DoubleSide,
+        transparent: true, // key to cutout texture
+        map: THREE.ImageUtils.loadTexture('https://i.imgur.com/sKCzp86.png')//'img/billBoard.png'
+    });
+	billBoard = new THREE.Mesh (new THREE.PlaneGeometry (10,200), material);
+    scene.add(billBoard);
+    pickables.push(billBoard);
+    billBoard.name = "billBoard";
+    billBoard.visible = false;
+	
+	grid = new THREE.GridHelper(200, 20, 'red', 'yellow');
+    scene.add(grid);
+    grid.visible = false;
+}
+
+function animate() {
+	controls.update();
+	render();
+    requestAnimationFrame(animate);
+}
+
+</script>
+</body>
+</html>

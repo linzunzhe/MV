@@ -128,6 +128,14 @@ function onDocumentMouseDown(event) {
 			mouseDown = true;
 		}
 		else if(state === "edge") {
+			controls.enableRotate = false;
+			let pos = xxyy(intersects[0].point);
+			bEdge.line.geometry.vertices[0].x = pos.x;
+			bEdge.line.geometry.vertices[0].y = Height;
+			bEdge.line.geometry.vertices[0].z = pos.z;
+			bEdge.visible(true);
+			gridXZ.visible = false;
+			mouseDown = true;
 		}
 	}
 }
@@ -163,6 +171,14 @@ function onDocumentMouseUp(event) {
 				billBoard.visible = false;
 				mouseDown = false;
 				pickNum = -1;
+			}
+			else if(state === "edge") {
+				controls.enableRotate = true;
+				grid.visible = false;
+				gridXZ.visible = true;
+				bEdge.visible(false);
+				bEdge.push();
+				mouseDown = false;
 			}
 		}
 	}
@@ -244,6 +260,12 @@ function onDocumentMouseMove(event) {
 			}
 			else if(state === "stretch" && pickNum != -1) { //stretch
 				boxes.stretch(pickNum, xxyy(intersects[0].point));
+			}
+			else if(state === "edge") {
+				bEdge.line.geometry.vertices[1].x = pos.x;
+				bEdge.line.geometry.vertices[1].y = Height;
+				bEdge.line.geometry.vertices[1].z = pos.z;
+				bEdge.updata();
 			}
 		}
 	}

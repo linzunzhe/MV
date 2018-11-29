@@ -28,7 +28,9 @@ $("#move2").click(function() {
 
 $("#edge").click(function() {
 	state = "edge";
-	
+	grid.position.set( 0, Height, 0);
+	grid.visible = true;
+	pickplane.position.y = Height;
 });
 
 $("#back").click(function() {

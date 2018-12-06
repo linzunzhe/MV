@@ -44,6 +44,7 @@ class Box {
 				map: textureZ
 			})
 		]);
+		let Nmaterial = new THREE.MeshLambertMaterial({color: color});
         let mesh = new THREE.Mesh(new THREE.BoxGeometry(Math.abs(pos0.x - pos1.x) + 10, 10, Math.abs(pos0.z - pos1.z) + 10), material);
         mesh.position.set((pos0.x + pos1.x) / 2, (pos0.y + pos1.y) / 2, (pos0.z + pos1.z) / 2);
         mesh.name = boxid;

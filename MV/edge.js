@@ -28,12 +28,12 @@ class buildEdge {
     push(){
     	let point1 = new THREE.Mesh( new THREE.SphereBufferGeometry( 1.5, 18, 18 ), new THREE.MeshBasicMaterial( {color: 0xff3333} ));
         point1.position.copy(this.rpoint.position.clone());
-        scene.add(point1);
+		edge_line.add(point1);
         let point2 = new THREE.Mesh( new THREE.SphereBufferGeometry( 1.5, 18, 18 ), new THREE.MeshBasicMaterial( {color: 0xff3333} ));
         point2.position.copy(this.lpoint.position.clone());
-        scene.add(point2);
+        edge_line.add(point2);
         let line = new THREE.Line(this.geometry.clone(), new THREE.LineBasicMaterial({color: 0xffffff}));
-        scene.add(line);
+        edge_line.add(line);
         //SAVE.save(this.rpoint.position.clone(), this.lpoint.position.clone());
         /**************************/
     }

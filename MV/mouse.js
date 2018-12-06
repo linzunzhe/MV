@@ -122,7 +122,7 @@ function onDocumentMouseDown(event) {
 			let pos = xxyy(boxes.boxes[num].position.clone());
 			billBoard.position.x = pos.x;
 			billBoard.position.z = pos.z;
-			rotateBillboard();
+			//rotateBillboard();
 			billBoard.visible = true;
 			pickNum = num;
 			mouseDown = true;
@@ -174,7 +174,6 @@ function onDocumentMouseUp(event) {
 			}
 			else if(state === "edge") {
 				controls.enableRotate = true;
-				grid.visible = false;
 				gridXZ.visible = true;
 				bEdge.visible(false);
 				bEdge.push();
@@ -262,6 +261,10 @@ function onDocumentMouseMove(event) {
 				boxes.stretch(pickNum, xxyy(intersects[0].point));
 			}
 			else if(state === "edge") {
+				/*if(pos.y != Height) {
+					pos.x = pos.x + Height - pos.y + 5;
+					pos.z = pos.z + Height - pos.y + 5;
+				}*/
 				bEdge.line.geometry.vertices[1].x = pos.x;
 				bEdge.line.geometry.vertices[1].y = Height;
 				bEdge.line.geometry.vertices[1].z = pos.z;

@@ -1,10 +1,11 @@
-var camera, cameraW, cameraX, cameraY, cameraZ, cameraHUD, cameraHUD2;
+var camera, cameraW, cameraX, cameraY, cameraZ, cameraHUD, cameraHUD2, cameraHUD3;
 var renderer, rendererW, rendererX, rendererY, rendererZ;
-var scene, sceneHUD, sceneHUD2;
+var scene, sceneHUD, sceneHUD2, sceneHUD3;
 var controls, halfSize = 100;
 var WW1 = $("#container").innerWidth(), HH1 = $("#container").innerHeight();
 var WW2 = $("#container_w").innerWidth(), HH2 = $("#container_w").innerHeight();
 var WW3 = $("#container_y").innerWidth(), HH3 = $("#container_y").innerHeight();//x,y,z的size相同
+var imgPlane;
 
 function Scene() {
 	scene = new THREE.Scene();
@@ -118,6 +119,15 @@ function Scene() {
         bor.add(border);
     }
     sceneHUD2.add(bor);
+	
+	/*HUD3 背景圖*/
+	sceneHUD3 = new THREE.Scene();
+	cameraHUD3 = new THREE.OrthographicCamera(-10.5, 10.5, 10.5, -10.5, -10, 10);
+	cameraHUD3.position.z = 10;
+	sceneHUD3.add(cameraHUD3);
+	
+	imgPlane = new THREE.Mesh(new THREE.PlaneGeometry( 100, 20), new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture('https://i.imgur.com/tRsJ3ok.jpg')}));
+	sceneHUD3.add(imgPlane);
 }
 
 function render() {
@@ -135,6 +145,7 @@ function render() {
     rendererW.setScissor( 0, 0, WW2, HH2);
     cameraW.updateProjectionMatrix();
     rendererW.clear();
+	rendererW.render(sceneHUD3, cameraHUD3);
     rendererW.render(scene, cameraW);
     rendererW.render(sceneHUD, cameraHUD);
     
@@ -180,6 +191,10 @@ function reSize() {
     cameraW.left = -150*whratio;
   	cameraW.right = 150*whratio;
   	cameraW.updateProjectionMatrix();
+	
+	cameraHUD3.left = -100*whratio;
+  	cameraHUD3.right = 100*whratio;
+  	cameraHUD3.updateProjectionMatrix();
     
     whratio = WW3/HH3;
     cameraX.left = -100*whratio;

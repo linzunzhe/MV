@@ -1,50 +1,12 @@
 var boxid = 0;
 var color = new THREE.Color(0x4444ff);
-var boxStyle = "https://i.imgur.com/DII1KaT.png";
 
 class Box {
     constructor() {
         this.boxes = [];
     }
     push(pos0, pos1) {
-		let textureX = THREE.ImageUtils.loadTexture(boxStyle);
-		let textureZ = THREE.ImageUtils.loadTexture(boxStyle);
-		textureX.repeat.set((Math.abs(pos0.z - pos1.z) + 10) / 10, 1);
-		textureX.wrapS = THREE.RepeatWrapping;
-		textureX.wrapT = THREE.RepeatWrapping;
-		//textureX.minFilter = THREE.LinearFilter;
-		textureZ.repeat.set((Math.abs(pos0.x - pos1.x) + 10) / 10, 1);
-		textureZ.wrapS = THREE.RepeatWrapping;
-		textureZ.wrapT = THREE.RepeatWrapping;
-		//textureY.minFilter = THREE.LinearFilter;
-		let material = new THREE.MultiMaterial([new THREE.MeshLambertMaterial({ // +x
-				color: color,
-				transparent: true,
-				map: textureX
-			}),
-			new THREE.MeshLambertMaterial({ // -x
-				color: color,
-				transparent: true,
-				map: textureX
-			}),
-			new THREE.MeshLambertMaterial({ // +y
-				color: color
-			}),
-			new THREE.MeshLambertMaterial({ // -Y
-				color: color
-			}),
-			new THREE.MeshLambertMaterial({ // +z
-				color: color,
-				transparent: true,
-				map: textureZ
-			}),
-			new THREE.MeshLambertMaterial({ // -Z
-				color: color,
-				transparent: true,
-				map: textureZ
-			})
-		]);
-		let Nmaterial = new THREE.MeshLambertMaterial({color: color});
+		let material = new THREE.MeshLambertMaterial({color: color});
         let mesh = new THREE.Mesh(new THREE.BoxGeometry(Math.abs(pos0.x - pos1.x) + 10, 10, Math.abs(pos0.z - pos1.z) + 10), material);
         mesh.position.set((pos0.x + pos1.x) / 2, (pos0.y + pos1.y) / 2, (pos0.z + pos1.z) / 2);
         mesh.name = boxid;
@@ -80,6 +42,12 @@ class Box {
         this.boxes.pop();
         boxid--;
     }
+	moveDown(num) {
+		this.boxes[num].material = new THREE.MeshLambertMaterial({color: 0XFF2222});
+	}
+	moveUp(num) {
+		this.boxes[num].material = new THREE.MeshLambertMaterial({color: color});
+	}
 }
 
 class tBox {

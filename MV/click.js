@@ -88,12 +88,6 @@ $("#colorL").click(function() {
 	colorUpdata();
 });
 
-$("#style").click(function() {
-	let str = "url('" + $(this).val() + "')";
-	$("#styleBlock").css({"background-image": str});
-	boxStyle = $(this).val();
-});
-
 function colorUpdata() {
 	color.setHSL($("#colorH").val()/360, $("#colorS").val(), $("#colorL").val());
 	let str = "hsl(" + $("#colorH").val() + "," + $("#colorS").val()*100 + "%," + $("#colorL").val()*100 + "%)";

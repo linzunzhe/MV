@@ -84,6 +84,7 @@ function onDocumentMouseDown(event) {
 			grid.position.set(0, boxes.boxes[num].position.y, 0);
 			pickplane.rotation.set(0, 0, 0);
 			pickplane.position.set(0, boxes.boxes[num].position.y, 0);
+			boxes.moveDown(pickNum);
 		}
 		else if(state === "move1" && num != "building") { //move1  XY平面移動
 			controls.enableRotate = false; //鏡頭旋轉禁止
@@ -158,6 +159,7 @@ function onDocumentMouseUp(event) {
 			else if((state === "move0" || state === "move1" || state === "move2") && pickNum != -1) { //move
 				controls.enableRotate = true;
 				mouseDown = false;
+				boxes.moveUp(pickNum);
 				pickNum = -1;
 				grid.visible = false;
                 gridXZ.visible = true;
@@ -210,6 +212,7 @@ function onDocumentMouseMove(event) {
 				if (pos.x > 100 || pos.x < -100 || pos.y > 100 || pos.y < -100 || pos.z > 100 || pos.z < -100) { //超過邊界
                     controls.enableRotate = true;
 					mouseDown = false;
+					boxes.moveUp(pickNum);
 					pickNum = -1;
 					grid.visible = false;
 					gridXZ.visible = true;

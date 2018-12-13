@@ -4,12 +4,14 @@ var pickplane;
 var gridXZ, grid; //gridXZ: 白色   grid: 黃色
 var bEdge, edge_line;
 var billBoard;
+var button_img = [];
+var posSetX, posSetZ;
 
 function Others() {
 	tbox = new tBox();
 	boxes = new Box();
 	
-	pickplane = new THREE.Mesh(new THREE.BoxGeometry(220, 0.1, 220), new THREE.MeshNormalMaterial({
+	pickplane = new THREE.Mesh(new THREE.BoxGeometry(200, 0.1, 200), new THREE.MeshNormalMaterial({
 		transparent: true,
 		opacity: 0.0
 	}));
@@ -40,6 +42,40 @@ function Others() {
     pickables.push(billBoard);
     billBoard.name = "billBoard";
     billBoard.visible = false;
+	
+	button_img[0] = ["https://i.imgur.com/5RVuK5h.png", "https://i.imgur.com/IqKTZib.png"];//build
+	button_img[1] = ["https://i.imgur.com/ZQ9nBDh.png", "https://i.imgur.com/BXe0IHk.png"];//delete
+	button_img[2] = ["https://i.imgur.com/2Tnas0O.png", "https://i.imgur.com/c3fsjj2.png"];//stretch
+	button_img[3] = ["https://i.imgur.com/G5qEiRR.png", "https://i.imgur.com/f2iRyvV.png"];//Sview
+	button_img[4] = ["https://i.imgur.com/hT0B5cq.png", "https://i.imgur.com/NLwC9yY.png"];//move0
+	button_img[5] = ["https://i.imgur.com/x4CICtS.png", "https://i.imgur.com/taEUN5h.png"];//move1
+	button_img[6] = ["https://i.imgur.com/XCs7VbW.png", "https://i.imgur.com/aYlYg8o.png"];//move2
+	button_img[7] = ["https://i.imgur.com/MEwT42E.png", "https://i.imgur.com/8RdFtB7.png"];//back
+	button_img[8] = ["https://i.imgur.com/StlDNC3.png", "https://i.imgur.com/arZVj6I.png"];//big
+	button_img[9] = ["https://i.imgur.com/ziQWpEH.png", "https://i.imgur.com/YDH57p4.png"];//small
+	
+	let SpriteText2D = THREE_Text.SpriteText2D;
+	let textAlign = THREE_Text.textAlign;
+	
+	posSetX = new SpriteText2D("X", {
+		align: textAlign.center,
+		font: '20px Courier',
+		fillStyle: '#FF2222',
+		antialias: true
+	});
+	posSetX.position.set(130, 0, 0);
+	posSetX.scale.set(.5, .5, .5);
+	scene.add(posSetX);
+	
+	posSetZ = new SpriteText2D("Z", {
+		align: textAlign.center,
+		font: '20px Courier',
+		fillStyle: '#2222FF',
+		antialias: true
+	});
+	posSetZ.position.set(0, 0, 130);
+	posSetZ.scale.set(.5, .5, .5);
+	scene.add(posSetZ);
 }
 
 function buildBill() {

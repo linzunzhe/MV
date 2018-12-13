@@ -68,16 +68,20 @@
 <div id="container"></div>
 <div id="info">
 	<div style="border-width:2px;border-style:dashed;border-color:#FFAC55;">
-		<button id="building" style="width: 50px">build</button>
-		<button id="delete" style="width: 50px">delete</button>
-		<button id="stretch" style="width: 55px">stretch</button>
-		<button id="Sview" style="width: 50px">Sview</button>
+		<button id="building" title = "build" style="width: 50px; height: 50px; background-image: url('https://i.imgur.com/IqKTZib.png'); background-size: contain;"></button>
+		<button id="delete" title = "delete" style="width: 50px; height: 50px; background-image: url('https://i.imgur.com/ZQ9nBDh.png'); background-size: contain;"></button>
+		<button id="stretch" title = "stretch" style="width: 50px; height: 50px; background-image: url('https://i.imgur.com/2Tnas0O.png'); background-size: contain;"></button>
+		<button id="Sview" title = "Sview" style="width: 50px; height: 50px; background-image: url('https://i.imgur.com/G5qEiRR.png'); background-size: contain;"></button>
 	</div>
 	<div style="border-width:2px;border-style:dashed;border-color:#55ACFF;">
-		<button id="move0" style="width: 50px">move0</button>
-		<button id="move1" style="width: 50px">move1</button>
-		<button id="move2" style="width: 50px">move2</button>
-		<button id="back" style="width: 50px">back</button>
+		<button id="move0" title = "move0" style="width: 50px; height: 50px; background-image: url('https://i.imgur.com/hT0B5cq.png'); background-size: contain;"></button>
+		<button id="move1" title = "move1" style="width: 50px; height: 50px; background-image: url('https://i.imgur.com/x4CICtS.png'); background-size: contain;"></button>
+		<button id="move2" title = "move2" style="width: 50px; height: 50px; background-image: url('https://i.imgur.com/XCs7VbW.png'); background-size: contain;"></button>
+		<button id="back" title = "back" style="width: 50px; height: 50px; background-image: url('https://i.imgur.com/MEwT42E.png'); background-size: contain;"></button>
+	</div>
+	<div style="border-width:2px;border-style:dashed;border-color:#ACFF55;">
+		<button id="bigScene" title = "bigScene" style="width: 50px; height: 50px; background-image: url('https://i.imgur.com/StlDNC3.png'); background-size: contain;"></button>
+		<button id="smallScene" title = "smallScene" style="width: 50px; height: 50px; background-image: url('https://i.imgur.com/ziQWpEH.png'); background-size: contain;"></button>
 	</div>
 	<div style="border-width:2px;border-style:dashed;border-color:#55FFAC;">
 		<button id="edge" style="width: 50px">edge</button>
@@ -85,9 +89,7 @@
 	</div>
 	<div style="border-width:2px;border-style:dashed;border-color:#AC55FF;">
 		URL:<input type="text" id="imgUrl" style="width:150px" value="https://i.imgur.com/tRsJ3ok.jpg"><br/>
-		W:<input type="text" id="imgW" style="width:50px" value=100>
-		H:<input type="text" id="imgH" style="width:50px" value=20>
-		<button id="img" style="width: 50px">img</button>
+		size:<input type="text" id="imgSize" style="width: 50px" value = 1>
 	</div>
 	<div style="border-width:2px;border-style:dashed;border-color:#FF55AC;">
 		color
@@ -98,9 +100,10 @@
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/94/three.min.js"></script>
 <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
 <script src="https://jyunming-chen.github.io/tutsplus/js/KeyboardState.js"></script>
+<script src="https://rawgit.com/jyunming-chen/tutsplus/master/js/text2D.js"></script>
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <!--MY.js-->
 <script src="scene.js"></script>

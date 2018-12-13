@@ -5,7 +5,7 @@ var controls, halfSize = 100;
 var WW1 = $("#container").innerWidth(), HH1 = $("#container").innerHeight();
 var WW2 = $("#container_w").innerWidth(), HH2 = $("#container_w").innerHeight();
 var WW3 = $("#container_y").innerWidth(), HH3 = $("#container_y").innerHeight();//x,y,z的size相同
-var imgPlane;
+var imgPlane, imgPlaneSize = 1;
 
 function Scene() {
 	scene = new THREE.Scene();
@@ -118,21 +118,33 @@ function Scene() {
         let border = new THREE.Line(geometry, material);
         bor.add(border);
     }
+	bor.position.z = -10;
     sceneHUD2.add(bor);
 	
 	/*HUD3 背景圖*/
 	sceneHUD3 = new THREE.Scene();
-	cameraHUD3 = new THREE.OrthographicCamera(-10.5, 10.5, 10.5, -10.5, -10, 10);
+	cameraHUD3 = new THREE.OrthographicCamera(-100, 100, 100, -100, -10, 10);
 	cameraHUD3.position.z = 10;
 	sceneHUD3.add(cameraHUD3);
 	
-	imgPlane = new THREE.Mesh(new THREE.PlaneGeometry( 100, 20), new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture('https://i.imgur.com/tRsJ3ok.jpg')}));
+	let texture = new THREE.TextureLoader().load( "https://i.imgur.com/tRsJ3ok.jpg", function ( tex ) {
+		// tex and texture are the same in this example, but that might not always be the case
+		//console.log( tex.image.width, tex.image.height );
+		//console.log( texture.image.width, texture.image.height );
+		setImgPlane( tex.image.width, tex.image.height);
+	} );
+}
+
+function setImgPlane( x, y) {
+	imgPlane = new THREE.Mesh(new THREE.PlaneGeometry( x / 10 * imgPlaneSize, y / 10 * imgPlaneSize), new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture('https://i.imgur.com/tRsJ3ok.jpg')}));
+	imgPlane.z = -10;
 	sceneHUD3.add(imgPlane);
 }
 
 function render() {
 	reSize();
 	
+	$("#container").append(renderer.domElement);
     renderer.setViewport( 0, 0, WW1, HH1);
     camera.updateProjectionMatrix();
     renderer.setScissor( 0, 0, WW1,  HH1);
@@ -186,11 +198,13 @@ function reSize() {
     camera.left = -100*whratio;
   	camera.right = 100*whratio;
   	camera.updateProjectionMatrix();
+	renderer.setSize( WW1, HH1);
     
     whratio = WW2/HH2;
     cameraW.left = -150*whratio;
   	cameraW.right = 150*whratio;
   	cameraW.updateProjectionMatrix();
+	rendererW.setSize( WW2, HH2);
 	
 	cameraHUD3.left = -100*whratio;
   	cameraHUD3.right = 100*whratio;
@@ -200,10 +214,12 @@ function reSize() {
     cameraX.left = -100*whratio;
   	cameraX.right = 100*whratio;
   	cameraX.updateProjectionMatrix();
+	rendererX.setSize( WW3, HH3);
     
     cameraY.left = -100*whratio;
   	cameraY.right = 100*whratio;
   	cameraY.updateProjectionMatrix();
+	rendererY.setSize( WW3, HH3);
     
     cameraHUD2.left = -100*whratio;
   	cameraHUD2.right = 100*whratio;
@@ -212,4 +228,5 @@ function reSize() {
     cameraZ.left = -100*whratio;
   	cameraZ.right = 100*whratio;
   	cameraZ.updateProjectionMatrix();
+	rendererZ.setSize( WW3, HH3);
 }

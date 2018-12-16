@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#info {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  color: #ffff00
+}
+
+body {
+  overflow: hidden;
+}
+</style>
+</head>
+<body>
+<div id="info">hw5
+  <br/>MD2<br/>
+  <button id="camera" style="width: 58px">camera</button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/94/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src='https://linzunzhe.github.io/MV/MD2/js/MD2Loader.js'></script>
+<script src='https://linzunzhe.github.io/MV/MD2/js/MorphBlendMesh.js'></script>
+<script src='https://linzunzhe.github.io/MV/MD2/js/MD2CharacterComplex.js'></script>
+<script src='https://linzunzhe.github.io/MV/MD2/js/Gyroscope.js'></script>
+<script>
+class MD2Wrapper {
+  constructor(config, controls, pos, scale = 1, push) {
+
+    this.md2 = new THREE.MD2CharacterComplex();
+    this.md2.scale = scale
+    this.md2.controls = controls
+
+    this.md2.onLoadComplete = function() {
+      // here: 'this' is md2
+
+      // cast and receive shadows
+      this.enableShadows(true);
+
+      this.setWeapon(0);
+      this.setSkin(0);
+
+      //this.root.position.copy (pos);
+      this.root.position.x = pos.x;
+      this.root.position.z = pos.z;
+
+      // y is automatically set, accoording to scale ...				
+      console.log('y is ' + this.root.position.y)
+
+      scene.add(this.root);
+      this.root.visible = push;
+
+    }
+    this.md2.loadParts(config);
+
+  }
+}
+var camera, camera1, scene, renderer, cameraControls;
+var clock = new THREE.Clock();
+var ogroiWrap = [],
+  ogroid = 0,
+  light, ogroHeight = 72.75333023071289,
+  gyro;
+var oldpos = new THREE.Vector3(0, 0, 0),
+  newpos;
+var coin1, coin2, coin3, det = 0,
+  aa = 0.01, cameramode = false;
+THREE.ImageUtils.crossOrigin = '';
+
+$("#camera").click(function() {
+    cameramode = !cameramode;
+});
+
+function Building() {
+  let obj = new THREE.Object3D();
+
+  let texture0 = THREE.ImageUtils.loadTexture('https://i.imgur.com/lSk3yha.png');
+  texture0.repeat.set(2.5, 2.5);
+  texture0.wrapS = THREE.RepeatWrapping;
+  texture0.wrapT = THREE.RepeatWrapping;
+  let texture1 = THREE.ImageUtils.loadTexture('https://i.imgur.com/lSk3yha.png');
+  texture1.repeat.set(2.5, 0.5);
+  texture1.wrapS = THREE.RepeatWrapping;
+  texture1.wrapT = THREE.RepeatWrapping;
+  let texture2 = THREE.ImageUtils.loadTexture('https://i.imgur.com/lSk3yha.png');
+  texture2.repeat.set(2.5, 1.0);
+  texture2.wrapS = THREE.RepeatWrapping;
+  texture2.wrapT = THREE.RepeatWrapping;
+  let texture3 = THREE.ImageUtils.loadTexture('https://i.imgur.com/lSk3yha.png');
+  texture3.repeat.set(2.5, 1.5);
+  texture3.wrapS = THREE.RepeatWrapping;
+  texture3.wrapT = THREE.RepeatWrapping;
+  let texture4 = THREE.ImageUtils.loadTexture('https://i.imgur.com/lSk3yha.png');
+  texture4.repeat.set(2.5, 2.0);
+  texture4.wrapS = THREE.RepeatWrapping;
+  texture4.wrapT = THREE.RepeatWrapping;
+  let texture5 = THREE.ImageUtils.loadTexture('https://i.imgur.com/lSk3yha.png');
+  texture5.repeat.set(2.5, 2.5);
+  texture5.wrapS = THREE.RepeatWrapping;
+  texture5.wrapT = THREE.RepeatWrapping;
+  let texture6 = THREE.ImageUtils.loadTexture('https://i.imgur.com/lSk3yha.png');
+  texture6.repeat.set(2.5, 3.0);
+  texture6.wrapS = THREE.RepeatWrapping;
+  texture6.wrapT = THREE.RepeatWrapping;
+  let texture7 = THREE.ImageUtils.loadTexture('https://i.imgur.com/lSk3yha.png');
+  texture7.repeat.set(2.5, 3.5);
+  texture7.wrapS = THREE.RepeatWrapping;
+  texture7.wrapT = THREE.RepeatWrapping;
+  let texture8 = THREE.ImageUtils.loadTexture('https://i.imgur.com/lSk3yha.png');
+  texture8.repeat.set(2.5, 4.5);
+  texture8.wrapS = THREE.RepeatWrapping;
+  texture8.wrapT = THREE.RepeatWrapping;
+
+  let mesh1 = new THREE.Mesh(new THREE.BoxGeometry(200, 40, 200), new THREE.MultiMaterial([
+    new THREE.MeshPhongMaterial({ // +x
+      map: texture1
+    }),
+    new THREE.MeshPhongMaterial({ // -x
+      map: texture1
+    }),
+    new THREE.MeshPhongMaterial({ // +y
+      map: texture0
+    }),
+    new THREE.MeshPhongMaterial({ // -Y
+      map: texture0
+    }),
+    new THREE.MeshPhongMaterial({ // +z
+      map: texture1
+    }),
+    new THREE.MeshPhongMaterial({ // -Z
+      map: texture1
+    })
+  ]));
+  mesh1.position.set(-500, 20, 500);
+  mesh1.receiveShadow = true;
+  mesh1.castShadow = true;
+  obj.add(mesh1);
+
+  let mesh2 = new THREE.Mesh(new THREE.BoxGeometry(200, 80, 200), new THREE.MultiMaterial([
+    new THREE.MeshPhongMaterial({ // +x
+      map: texture2
+    }),
+    new THREE.MeshPhongMaterial({ // -x
+      map: texture2
+    }),
+    new THREE.MeshPhongMaterial({ // +y
+      map: texture0
+    }),
+    new THREE.MeshPhongMaterial({ // -Y
+      map: texture0
+    }),
+    new THREE.MeshPhongMaterial({ // +z
+      map: texture2
+    }),
+    new THREE.MeshPhongMaterial({ // -Z
+      map: texture2
+    })
+  ]));
+  mesh2.position.set(-500, 40, 300);
+  mesh2.receiveShadow = true;
+  mesh2.castShadow = true;
+  obj.add(mesh2);
+
+  let mesh3 = new THREE.Mesh(new THREE.BoxGeometry(200, 120, 200), new THREE.MultiMaterial([
+    new THREE.MeshPhongMaterial({ // +x
+      map: texture3
+    }),
+    new THREE.MeshPhongMaterial({ // -x
+      map: texture3
+    }),
+    new THREE.MeshPhongMaterial({ // +y
+      map: texture0
+    }),
+    new THREE.MeshPhongMaterial({ // -Y
+      map: texture0
+    }),
+    new THREE.MeshPhongMaterial({ // +z
+      map: texture3
+    }),
+    new THREE.MeshPhongMaterial({ // -Z
+      map: texture3
+    })
+  ]));
+  mesh3.position.set(-500, 60, 100);
+  mesh3.receiveShadow = true;
+  mesh3.castShadow = true;
+  obj.add(mesh3);
+
+  let mesh4 = new THREE.Mesh(new THREE.BoxGeometry(200, 160, 200), new THREE.MultiMaterial([
+    new THREE.MeshPhongMaterial({ // +x
+      map: texture4
+    }),
+    new THREE.MeshPhongMaterial({ // -x
+      map: texture4
+    }),
+    new THREE.MeshPhongMaterial({ // +y
+      map: texture0
+    }),
+    new THREE.MeshPhongMaterial({ // -Y
+      map: texture0
+    }),
+    new THREE.MeshPhongMaterial({ // +z
+      map: texture4
+    }),
+    new THREE.MeshPhongMaterial({ // -Z
+      map: texture4
+    })
+  ]));
+  mesh4.position.set(-500, 80, -100);
+  mesh4.receiveShadow = true;
+  mesh4.castShadow = true;
+  obj.add(mesh4);
+
+  let mesh5 = new THREE.Mesh(new THREE.BoxGeometry(200, 200, 200), new THREE.MultiMaterial([
+    new THREE.MeshPhongMaterial({ // +x
+      map: texture5
+    }),
+    new THREE.MeshPhongMaterial({ // -x
+      map: texture5
+    }),
+    new THREE.MeshPhongMaterial({ // +y
+      map: texture0
+    }),
+    new THREE.MeshPhongMaterial({ // -Y
+      map: texture0
+    }),
+    new THREE.MeshPhongMaterial({ // +z
+      map: texture5
+    }),
+    new THREE.MeshPhongMaterial({ // -Z
+      map: texture5
+    })
+  ]));
+  mesh5.position.set(-500, 100, -300);
+  mesh5.receiveShadow = true;
+  mesh5.castShadow = true;
+  obj.add(mesh5);
+
+  let mesh6 = new THREE.Mesh(new THREE.BoxGeometry(200, 240, 200), new THREE.MultiMaterial([
+    new THREE.MeshPhongMaterial({ // +x
+      map: texture6
+    }),
+    new THREE.MeshPhongMaterial({ // -x
+      map: texture6
+    }),
+    new THREE.MeshPhongMaterial({ // +y
+      map: texture0
+    }),
+    new THREE.MeshPhongMaterial({ // -Y
+      map: texture0
+    }),
+    new THREE.MeshPhongMaterial({ // +z
+      map: texture6
+    }),
+    new THREE.MeshPhongMaterial({ // -Z
+      map: texture6
+    })
+  ]));
+  mesh6.position.set(-500, 120, -500);
+  mesh6.receiveShadow = true;
+  mesh6.castShadow = true;
+  obj.add(mesh6);
+
+  let mesh7 = new THREE.Mesh(new THREE.BoxGeometry(200, 280, 200), new THREE.MultiMaterial([
+    new THREE.MeshPhongMaterial({ // +x
+      map: texture7
+    }),
+    new THREE.MeshPhongMaterial({ // -x
+      map: texture7
+    }),
+    new THREE.MeshPhongMaterial({ // +y
+      map: texture0
+    }),
+    new THREE.MeshPhongMaterial({ // -Y
+      map: texture0
+    }),
+    new THREE.MeshPhongMaterial({ // +z
+      map: texture7
+    }),
+    new THREE.MeshPhongMaterial({ // -Z
+      map: texture7
+    })
+  ]));
+  mesh7.position.set(-500, 140, -700);
+  mesh7.receiveShadow = true;
+  mesh7.castShadow = true;
+  obj.add(mesh7);
+
+  let mesh8 = new THREE.Mesh(new THREE.BoxGeometry(200, 360, 200), new THREE.MultiMaterial([
+    new THREE.MeshPhongMaterial({ // +x
+      map: texture8
+    }),
+    new THREE.MeshPhongMaterial({ // -x
+      map: texture8
+    }),
+    new THREE.MeshPhongMaterial({ // +y
+      map: texture0
+    }),
+    new THREE.MeshPhongMaterial({ // -Y
+      map: texture0
+    }),
+    new THREE.MeshPhongMaterial({ // +z
+      map: texture8
+    }),
+    new THREE.MeshPhongMaterial({ // -Z
+      map: texture8
+    })
+  ]));
+  mesh8.position.set(500, 180, -700);
+  mesh8.receiveShadow = true;
+  mesh8.castShadow = true;
+  obj.add(mesh8);
+
+  let mesh9 = new THREE.Mesh(new THREE.BoxGeometry(800, 40, 200), new THREE.MeshPhongMaterial({
+    map: THREE.ImageUtils.loadTexture('https://i.imgur.com/QLuv8Xe.jpg')
+  }));
+  mesh9.position.set(0, 300, -700);
+  mesh9.receiveShadow = true;
+  mesh9.castShadow = true;
+  obj.add(mesh9);
+
+  return obj;
+}
+
+function buildCoin() {
+  coin1 = {
+    mesh: new THREE.Mesh(new THREE.OctahedronBufferGeometry(30, 0), new THREE.MeshPhongMaterial({
+      color: 0xFF2222
+    })),
+    pos: new THREE.Vector3(-500, 180, 100),
+    catch: false
+  };
+  coin1.mesh.position.copy(coin1.pos);
+  scene.add(coin1.mesh);
+
+  coin2 = {
+    mesh: new THREE.Mesh(new THREE.OctahedronBufferGeometry(30, 0), new THREE.MeshPhongMaterial({
+      color: 0x2222FF
+    })),
+    pos: new THREE.Vector3(500, 420, -700),
+    catch: false
+  };
+  coin2.mesh.position.copy(coin2.pos);
+  scene.add(coin2.mesh);
+
+  coin3 = {
+    mesh: new THREE.Mesh(new THREE.OctahedronBufferGeometry(30, 0), new THREE.MeshPhongMaterial({
+      color: 0x22FF22
+    })),
+    pos: new THREE.Vector3(-100, 60, -700),
+    catch: false
+  };
+  coin3.mesh.position.copy(coin3.pos);
+  scene.add(coin3.mesh);
+}
+
+init();
+animate();
+
+function init() {
+
+  scene = new THREE.Scene();
+
+	camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 6000);
+  camera.position.set(0, 150, 320);
+  scene.add(camera);
+  
+  camera1 = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 6000);
+  camera1.position.set(0, 150, 800);
+  scene.add(camera1);
+
+  var gridXZ = new THREE.GridHelper(400, 20, 'red', 'white');
+  //scene.add(gridXZ);
+
+  renderer = new THREE.WebGLRenderer({
+    antialias: true
+  });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x888888);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  /*cameraControls = new THREE.OrbitControls(camera, renderer.domElement);
+  cameraControls.target.set(0, 50, 0);
+  cameraControls.update();*/
+
+  document.body.appendChild(renderer.domElement);
+  ////////////////////////////////////////////////////////////////////////
+  window.addEventListener('resize', onWindowResize, false);
+  document.addEventListener('keydown', onKeyDown, false);
+  document.addEventListener('keyup', onKeyUp, false);
+
+  light = new THREE.DirectionalLight(0xdddddd, 2.25);
+  light.position.set(-500, 500, 500);
+  light.castShadow = true;
+  light.shadow.mapSize.width = 1024;
+  light.shadow.mapSize.height = 512;
+
+  light.shadow.camera.near = 1;
+  light.shadow.camera.far = 4000;
+
+  light.shadow.camera.left = -1000;
+  light.shadow.camera.right = 1000;
+  light.shadow.camera.top = 1000;
+  light.shadow.camera.bottom = -1000;
+  scene.add(light);
+  let light2 = new THREE.AmbientLight(0x444444);
+  scene.add(light2);
+
+  var gt = new THREE.TextureLoader().load("https://i.imgur.com/Flrvufn.png");
+  var gg = new THREE.PlaneBufferGeometry(16000, 16000);
+  var gm = new THREE.MeshPhongMaterial({
+    color: 0xffffff,
+    map: gt
+  });
+
+
+  var ground = new THREE.Mesh(gg, gm);
+  ground.rotation.x = -Math.PI / 2;
+  ground.material.map.repeat.set(96, 96);
+  ground.material.map.wrapS = THREE.RepeatWrapping;
+  ground.material.map.wrapT = THREE.RepeatWrapping;
+  // note that because the ground does not cast a shadow, .castShadow is left false
+  ground.receiveShadow = true;
+
+  scene.add(ground);
+  //////////////////////////////////
+  let configOgro = {
+    baseUrl: "https://linzunzhe.github.io/MV/MD2/md2models/ogro/",
+    body: "ogro.md2",
+    skins: ["arboshak.png"],
+    weapons: [],
+    animations: {
+      move: "run",
+      idle: "stand",
+      jump: "jump",
+      attack: "attack",
+      crouchMove: "cwalk",
+      crouchIdle: "cstand",
+      crouchAttach: "crattack"
+    },
+    walkSpeed: 350, //translation speed
+    crouchSpeed: 175
+  };
+  let configOgroR = {
+    baseUrl: "https://linzunzhe.github.io/MV/MD2/md2models/ogro/",
+    body: "ogro.md2",
+    skins: ["ctf_r.png"],
+    weapons: [],
+    animations: {
+      move: "run",
+      idle: "stand",
+      jump: "jump",
+      attack: "attack",
+      crouchMove: "cwalk",
+      crouchIdle: "cstand",
+      crouchAttach: "crattack"
+    },
+    walkSpeed: 350, //translation speed
+    crouchSpeed: 175
+  };
+  let configOgroG = {
+    baseUrl: "https://linzunzhe.github.io/MV/MD2/md2models/ogro/",
+    body: "ogro.md2",
+    skins: ["darkam.png"],
+    weapons: [],
+    animations: {
+      move: "run",
+      idle: "stand",
+      jump: "jump",
+      attack: "attack",
+      crouchMove: "cwalk",
+      crouchIdle: "cstand",
+      crouchAttach: "crattack"
+    },
+    walkSpeed: 350, //translation speed
+    crouchSpeed: 175
+  };
+  let configOgroB = {
+    baseUrl: "https://linzunzhe.github.io/MV/MD2/md2models/ogro/",
+    body: "ogro.md2",
+    skins: ["ctf_b.png"],
+    weapons: [],
+    animations: {
+      move: "run",
+      idle: "stand",
+      jump: "jump",
+      attack: "attack",
+      crouchMove: "cwalk",
+      crouchIdle: "cstand",
+      crouchAttach: "crattack"
+    },
+    walkSpeed: 350, //translation speed
+    crouchSpeed: 175
+  };
+  let controls = {
+    moveForward: false,
+    moveBackward: false,
+    moveLeft: false,
+    moveRight: false
+  };
+
+  ogroiWrap[0] = new MD2Wrapper(configOgro, controls, new THREE.Vector3(0, 0, 0), 3, true);
+  ogroiWrap[1] = new MD2Wrapper(configOgroR, controls, new THREE.Vector3(0, 0, 0), 3, false);
+  ogroiWrap[2] = new MD2Wrapper(configOgroG, controls, new THREE.Vector3(0, 0, 0), 3, false);
+  ogroiWrap[3] = new MD2Wrapper(configOgroB, controls, new THREE.Vector3(0, 0, 0), 3, false);
+  
+	gyro = new THREE.Gyroscope();
+  gyro.add(camera1);
+  //gyro.add(light, light.target);
+  ogroiWrap[0].md2.root.add(gyro);
+  //////////////////////
+  scene.add(Building());
+  buildCoin();
+}
+
+function animate() {
+  det = det + aa;
+  if (det > Math.PI * 2 || det < 0) aa *= -1;
+  if (coin1.catch === false) {
+    coin1.mesh.position.y = det * 10 + 180;
+    coin1.mesh.rotation.y = det;
+  }
+  if (coin2.catch === false) {
+    coin2.mesh.position.y = det * 10 + 420;
+    coin2.mesh.rotation.y = det;
+  }
+  if (coin3.catch === false) {
+    coin3.mesh.position.y = det * 10 + 60;
+    coin3.mesh.rotation.y = det;
+  }
+
+  if (cameramode) {
+    camera.position.copy(ogroiWrap[ogroid].md2.root.localToWorld(new THREE.Vector3(0, 200, -300)));
+    camera.lookAt(ogroiWrap[ogroid].md2.root.localToWorld(new THREE.Vector3(0, 0, 200)));
+  }
+
+  requestAnimationFrame(animate);
+  render();
+}
+
+function onWindowResize(event) {
+
+  let SCREEN_WIDTH = window.innerWidth;
+  let SCREEN_HEIGHT = window.innerHeight;
+
+  renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+  camera.aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
+  camera.updateProjectionMatrix();
+  
+  camera1.aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
+  camera1.updateProjectionMatrix();
+}
+
+function render() {
+  var delta = clock.getDelta();
+  if (ogroiWrap[ogroid].md2) {
+    for (let i = 0; i < 4; i++) {
+      oldpos.copy(ogroiWrap[i].md2.root.position.clone());
+
+      ogroiWrap[i].md2.update(delta);
+
+      newpos = findHeight(ogroiWrap[i].md2.root.position.x, ogroiWrap[ogroid].md2.root.position.y, ogroiWrap[i].md2.root.position.z);
+      if (newpos === -1) ogroiWrap[i].md2.root.position.copy(oldpos.clone());
+      else ogroiWrap[i].md2.root.position.y = newpos + ogroHeight;
+    }
+
+  }
+  if(cameramode)renderer.render(scene, camera);
+	else renderer.render(scene, camera1);
+}
+
+function onKeyDown(event) {
+
+  event.stopPropagation();
+  let controlsY = ogroiWrap[ogroid].md2.controls;
+
+  switch (event.keyCode) {
+
+    case 38:
+      /*up*/
+    case 87:
+      /*W*/
+      controlsY.moveForward = true;
+      break;
+
+    case 40:
+      /*down*/
+    case 83:
+      /*S*/
+      controlsY.moveBackward = true;
+      break;
+
+    case 37:
+      /*left*/
+    case 65:
+      /*A*/
+      controlsY.moveLeft = true;
+      break;
+
+    case 39:
+      /*right*/
+    case 68:
+      /*D*/
+      controlsY.moveRight = true;
+      break;
+
+    case 74:
+	case 106:
+      /*space*/
+      controlsY.jump = true;
+      let x = ogroiWrap[ogroid].md2.root.position.x;
+      let y = ogroiWrap[ogroid].md2.root.position.y - ogroHeight;
+      let z = ogroiWrap[ogroid].md2.root.position.z;
+      if (x >= -550 && x <= -450 && y === 120 && z >= 50 && z <= 150 && coin1.mesh.visible === true) {
+        coin1.mesh.visible = false;
+        ogroiWrap[ogroid].md2.root.visible = false;
+        ogroiWrap[1].md2.root.visible = true;
+        ogroid = 1;
+      } else if (x >= -150 && x <= -50 && y === 0 && z >= -750 && z <= -650 && coin3.mesh.visible === true) {
+        coin3.mesh.visible = false;
+        ogroiWrap[ogroid].md2.root.visible = false;
+        ogroiWrap[2].md2.root.visible = true;
+        ogroid = 2;
+      } else if (x >= 450 && x <= 550 && y === 360 && z >= -750 && z <= -650 && coin2.mesh.visible === true) {
+        coin2.mesh.visible = false;
+        ogroiWrap[ogroid].md2.root.visible = false;
+        ogroiWrap[3].md2.root.visible = true;
+        ogroid = 3;
+      }
+      break;
+      // jump: should save the animation before jump
+      // return to that animation, when SPACE is up
+
+    case 67:
+      /*C*/
+      controlsY.crouch = true;
+      break;
+    case 17:
+      /*ctrl*/
+      controlsY.attack = true;
+      break;
+
+  }
+
+}
+
+function onKeyUp(event) {
+
+  event.stopPropagation();
+  let controlsY = ogroiWrap[ogroid].md2.controls;
+
+  switch (event.keyCode) {
+
+    case 38:
+      /*up*/
+    case 87:
+      /*W*/
+      controlsY.moveForward = false;
+      break;
+
+    case 40:
+      /*down*/
+    case 83:
+      /*S*/
+      controlsY.moveBackward = false;
+      break;
+
+    case 37:
+      /*left*/
+    case 65:
+      /*A*/
+      controlsY.moveLeft = false;
+      break;
+
+    case 39:
+      /*right*/
+    case 68:
+      /*D*/
+      controlsY.moveRight = false;
+      break;
+
+    case 74:
+	case 106:
+      /*space*/
+      controlsY.jump = false;
+      break;
+      // jump: should save the animation before jump
+      // return to that animation, when SPACE is up
+
+    case 67:
+      /*C*/
+      controlsY.crouch = false;
+      break;
+    case 17:
+      /*ctrl*/
+      controlsY.attack = false;
+      break;
+
+  }
+
+}
+
+function findHeight(x, y, z) {
+  if (x >= -600 && x <= -400) {
+    if (z >= 400 && z <= 600) {
+      if (y - ogroHeight > 80) {
+        return -1
+      }
+      return 40;
+    } else if (z >= 200 && z <= 400) {
+      if (y - ogroHeight > 120 || y - ogroHeight < 40) {
+        return -1
+      }
+      return 80;
+    } else if (z >= 0 && z <= 200) {
+      if (y - ogroHeight > 160 || y - ogroHeight < 80) {
+        return -1
+      }
+      return 120;
+    } else if (z >= -200 && z <= 0) {
+      if (y - ogroHeight > 200 || y - ogroHeight < 120) {
+        return -1
+      }
+      return 160;
+    } else if (z >= -400 && z <= -200) {
+      if (y - ogroHeight > 240 || y - ogroHeight < 160) {
+        return -1
+      }
+      return 200;
+    } else if (z >= -600 && z <= -400) {
+      if (y - ogroHeight > 280 || y - ogroHeight < 200) {
+        return -1
+      }
+      return 240;
+    } else if (z >= -800 && z <= -600) {
+      if (y - ogroHeight > 320 || y - ogroHeight < 240) {
+        return -1
+      }
+      return 280;
+    } else {
+      if (y - ogroHeight > 40) {
+        return -1;
+      }
+      return 0;
+    }
+  } else if (x >= -400 && x <= 400 && z >= -800 && z <= -600) {
+    if (y - ogroHeight >= 280 && y - ogroHeight <= 360) {
+      return 320;
+    } else return 0;
+  } else if (x >= 400 && x <= 600 && z >= -800 && z <= -600) {
+    if (y - ogroHeight < 320) {
+      return -1
+    }
+    return 360;
+  } else if (y - ogroHeight > 40) {
+    return -1;
+  } else return 0;
+}
+</script>
+</body>
+</html>

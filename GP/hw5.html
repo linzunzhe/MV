@@ -18,9 +18,16 @@ body {
 </head>
 <body>
 <div id="info">hw5
-  <br/>MD2<br/>
+  <br/>MD2<br/>"j" to jump
   <button id="camera" style="width: 58px">camera</button>
+  <button id="BGM" style="width: 58px">bgm</button>
 </div>
+<audio id="backgroundsound" autoplay loop style="display:none">
+<source src="https://linzunzhe.github.io/MV/GP/bgm07.wav" type='audio/wav'>
+</audio>
+<audio id="catchsound" style="display:none">
+<source src="https://linzunzhe.github.io/MV/GP/bgm10.wav" type='audio/wav'>
+</audio>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/94/three.min.js"></script>
 <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -69,11 +76,17 @@ var ogroiWrap = [],
 var oldpos = new THREE.Vector3(0, 0, 0),
   newpos;
 var coin1, coin2, coin3, det = 0,
-  aa = 0.01, cameramode = false;
+  aa = 0.01, cameramode = false, catchsound, backgroundsound, toggle = false;
 THREE.ImageUtils.crossOrigin = '';
 
 $("#camera").click(function() {
     cameramode = !cameramode;
+});
+
+$("#BGM").click(function() {
+    if(toggle)backgroundsound.pause();
+    else backgroundsound.play();
+    toggle = !toggle
 });
 
 function Building() {
@@ -427,6 +440,9 @@ function init() {
   ground.material.map.wrapT = THREE.RepeatWrapping;
   // note that because the ground does not cast a shadow, .castShadow is left false
   ground.receiveShadow = true;
+  
+  catchsound = document.getElementById ('catchsound');
+  backgroundsound = document.getElementById ('backgroundsound');
 
   scene.add(ground);
   //////////////////////////////////
@@ -612,7 +628,7 @@ function onKeyDown(event) {
       break;
 
     case 74:
-	case 106:
+		case 106:
       /*space*/
       controlsY.jump = true;
       let x = ogroiWrap[ogroid].md2.root.position.x;
@@ -623,16 +639,19 @@ function onKeyDown(event) {
         ogroiWrap[ogroid].md2.root.visible = false;
         ogroiWrap[1].md2.root.visible = true;
         ogroid = 1;
+        catchsound.play();
       } else if (x >= -150 && x <= -50 && y === 0 && z >= -750 && z <= -650 && coin3.mesh.visible === true) {
         coin3.mesh.visible = false;
         ogroiWrap[ogroid].md2.root.visible = false;
         ogroiWrap[2].md2.root.visible = true;
         ogroid = 2;
+        catchsound.play();
       } else if (x >= 450 && x <= 550 && y === 360 && z >= -750 && z <= -650 && coin2.mesh.visible === true) {
         coin2.mesh.visible = false;
         ogroiWrap[ogroid].md2.root.visible = false;
         ogroiWrap[3].md2.root.visible = true;
         ogroid = 3;
+        catchsound.play();
       }
       break;
       // jump: should save the animation before jump
@@ -687,7 +706,7 @@ function onKeyUp(event) {
       break;
 
     case 74:
-	case 106:
+		case 106:
       /*space*/
       controlsY.jump = false;
       break;

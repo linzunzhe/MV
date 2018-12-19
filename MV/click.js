@@ -21,7 +21,12 @@ $("#stretch").click(function() {
 
 $("#Sview").click(function() {
 	changeButtonImage(3);
-    camera.position.set(500, 500, 500);
+    camera.position.copy(ScameraPos.clone());
+});
+
+/*設定專用視角，暫定，之後要改掉*/
+$("#S").click(function() {
+	ScameraPos.copy(cameraW.position.clone());
 });
 
 $("#move0").click(function() {
@@ -64,17 +69,47 @@ $("#smallScene").click(function() {
 	buttonFlash(9);
 });
 
-$("#edge").click(function() {
-	state = "edge";
+$("#edgeR").click(function() {
+	changeButtonImage(10);
+	state = "edgeR";
+	grid.position.set( 0, Height, 0);
+	grid.visible = true;
+	pickplane.position.y = Height;
+});
+
+$("#edgeG").click(function() {
+	changeButtonImage(11);
+	state = "edgeG";
 	grid.position.set( 0, Height, 0);
 	grid.visible = true;
 	pickplane.position.y = Height;
 });
 
 $("#eSH").click(function() {
-	edge_line.visible = !edge_line.visible;
-	if(edge_line.visible)$(this).text("HIDE");
+	edge_lineR.visible = !edge_lineR.visible;
+	edge_lineG.visible = !edge_lineG.visible;
+	if(edge_lineR.visible)$(this).text("HIDE");
 	else $(this).text("SHOW");
+});
+
+$("#clear").click(function() {
+	scene.remove(edge_lineR);
+	edge_lineR = new THREE.Object3D();
+	scene.add(edge_lineR);
+	scene.remove(edge_lineG);
+	edge_lineG = new THREE.Object3D();
+	scene.add(edge_lineG);
+	edgeR = [];
+	edgeG = [];
+});
+
+$("#save").click(function() {
+	save();
+});
+
+$("#play").click(function() {
+	state = "play";
+	testPlay();
 });
 
 $("#imgUrl").click(function() {
@@ -119,6 +154,8 @@ function changeButtonImage(num) {
 	$("#move0").css({"background-image": "url(" + button_img[4][0] + ")"});
 	$("#move1").css({"background-image": "url(" + button_img[5][0] + ")"});
 	$("#move2").css({"background-image": "url(" + button_img[6][0] + ")"});
+	$("#edgeR").css({"background-image": "url(" + button_img[10][0] + ")"});
+	$("#edgeG").css({"background-image": "url(" + button_img[11][0] + ")"});
 	switch(num){
 		case 0:
 			$("#building").css({"background-image": "url(" + button_img[0][1] + ")"});
@@ -140,6 +177,12 @@ function changeButtonImage(num) {
 			break;
 		case 6:
 			$("#move2").css({"background-image": "url(" + button_img[6][1] + ")"});
+			break;
+		case 10:
+			$("#edgeR").css({"background-image": "url(" + button_img[10][1] + ")"});
+			break;
+		case 11:
+			$("#edgeG").css({"background-image": "url(" + button_img[11][1] + ")"});
 			break;
 	}
 }

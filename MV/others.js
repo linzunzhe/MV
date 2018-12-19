@@ -2,10 +2,12 @@ var state = "building"
 var tbox, boxes;
 var pickplane;
 var gridXZ, grid; //gridXZ: 白色   grid: 黃色
-var bEdge, edge_line;
+var bEdge, edge_lineR, edge_lineG, edgeR = [], edgeG = [];
 var billBoard;
 var button_img = [];
 var posSetX, posSetZ;
+var flag, ida;
+var ScameraPos = new THREE.Vector3( 500, 500, 500);
 
 function Others() {
 	tbox = new tBox();
@@ -26,8 +28,10 @@ function Others() {
     scene.add(grid);
     grid.visible = false;
 	
-	edge_line = new THREE.Object3D();
-	scene.add(edge_line);
+	edge_lineR = new THREE.Object3D();
+	scene.add(edge_lineR);
+	edge_lineG = new THREE.Object3D();
+	scene.add(edge_lineG);
 	bEdge = new buildEdge();
 	
 	
@@ -43,16 +47,18 @@ function Others() {
     billBoard.name = "billBoard";
     billBoard.visible = false;
 	
-	button_img[0] = ["https://i.imgur.com/5RVuK5h.png", "https://i.imgur.com/IqKTZib.png"];//build
-	button_img[1] = ["https://i.imgur.com/ZQ9nBDh.png", "https://i.imgur.com/BXe0IHk.png"];//delete
-	button_img[2] = ["https://i.imgur.com/2Tnas0O.png", "https://i.imgur.com/c3fsjj2.png"];//stretch
-	button_img[3] = ["https://i.imgur.com/G5qEiRR.png", "https://i.imgur.com/f2iRyvV.png"];//Sview
-	button_img[4] = ["https://i.imgur.com/hT0B5cq.png", "https://i.imgur.com/NLwC9yY.png"];//move0
-	button_img[5] = ["https://i.imgur.com/x4CICtS.png", "https://i.imgur.com/taEUN5h.png"];//move1
-	button_img[6] = ["https://i.imgur.com/XCs7VbW.png", "https://i.imgur.com/aYlYg8o.png"];//move2
-	button_img[7] = ["https://i.imgur.com/MEwT42E.png", "https://i.imgur.com/8RdFtB7.png"];//back
-	button_img[8] = ["https://i.imgur.com/StlDNC3.png", "https://i.imgur.com/arZVj6I.png"];//big
-	button_img[9] = ["https://i.imgur.com/ziQWpEH.png", "https://i.imgur.com/YDH57p4.png"];//small
+	button_img[0]  = ["https://i.imgur.com/5RVuK5h.png", "https://i.imgur.com/IqKTZib.png"];//build
+	button_img[1]  = ["https://i.imgur.com/ZQ9nBDh.png", "https://i.imgur.com/BXe0IHk.png"];//delete
+	button_img[2]  = ["https://i.imgur.com/2Tnas0O.png", "https://i.imgur.com/c3fsjj2.png"];//stretch
+	button_img[3]  = ["https://i.imgur.com/G5qEiRR.png", "https://i.imgur.com/f2iRyvV.png"];//Sview
+	button_img[4]  = ["https://i.imgur.com/hT0B5cq.png", "https://i.imgur.com/NLwC9yY.png"];//move0
+	button_img[5]  = ["https://i.imgur.com/x4CICtS.png", "https://i.imgur.com/taEUN5h.png"];//move1
+	button_img[6]  = ["https://i.imgur.com/XCs7VbW.png", "https://i.imgur.com/aYlYg8o.png"];//move2
+	button_img[7]  = ["https://i.imgur.com/MEwT42E.png", "https://i.imgur.com/8RdFtB7.png"];//back
+	button_img[8]  = ["https://i.imgur.com/StlDNC3.png", "https://i.imgur.com/arZVj6I.png"];//big
+	button_img[9]  = ["https://i.imgur.com/ziQWpEH.png", "https://i.imgur.com/YDH57p4.png"];//small
+	button_img[10] = ["https://i.imgur.com/0z35aVG.png", "https://i.imgur.com/03phJyq.png"];//edgeR
+	button_img[11] = ["https://i.imgur.com/RunvInt.png", "https://i.imgur.com/sP45BPG.png"];//edgeG
 	
 	let SpriteText2D = THREE_Text.SpriteText2D;
 	let textAlign = THREE_Text.textAlign;
@@ -76,6 +82,11 @@ function Others() {
 	posSetZ.position.set(0, 0, 130);
 	posSetZ.scale.set(.5, .5, .5);
 	scene.add(posSetZ);
+	
+	ida = new Ida();
+	flag = ida.ida;
+	ida.ida.visible = false;
+	scene.add(flag);
 }
 
 function buildBill() {

@@ -1,7 +1,7 @@
 var camera, cameraW, cameraX, cameraY, cameraZ, cameraHUD, cameraHUD2, cameraHUD3;
 var renderer, rendererW, rendererX, rendererY, rendererZ;
 var scene, sceneHUD, sceneHUD2, sceneHUD3;
-var controls, halfSize = 100;
+var controls, halfSize = 100, controls2;//controls2: 右下角小視窗調整專用視角用
 var WW1 = $("#container").innerWidth(), HH1 = $("#container").innerHeight();
 var WW2 = $("#container_w").innerWidth(), HH2 = $("#container_w").innerHeight();
 var WW3 = $("#container_y").innerWidth(), HH3 = $("#container_y").innerHeight();//x,y,z的size相同
@@ -64,6 +64,9 @@ function Scene() {
     
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enablePan = false; //鏡頭平移禁止
+	
+	controls2 = new THREE.OrbitControls(cameraW, rendererW.domElement);
+    controls2.enablePan = false; //鏡頭平移禁止
 	
 	/*HUD   邊框*/
 	sceneHUD = new THREE.Scene();

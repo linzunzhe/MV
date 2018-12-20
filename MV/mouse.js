@@ -1,6 +1,6 @@
 var mouse = new THREE.Vector2();
 var raycaster = new THREE.Raycaster();
-var pickables = [];
+var pickables = [], pickables2 = [];
 var mouseDown = false;
 var num;
 var pickNum = -1;//當前點擊的方塊ID
@@ -55,88 +55,103 @@ function rotateBillboard() {
 }
 
 function onDocumentMouseDown(event) {
-	event.preventDefault();
-    mouse.x = (event.clientX / WW1) * 2 - 1 - 4/3;
-    mouse.y = -(event.clientY / HH1) * 2 + 1;
-    raycaster.setFromCamera(mouse, camera);
-    let intersects = raycaster.intersectObjects(pickables);
-	if (intersects.length > 0 && event.button === 0) {
-		num = intersects[0].object.name;
-		if(state === "building") { //building
-			controls.enableRotate = false; //鏡頭旋轉禁止
-			mouseDown = true;
-			intersects[0].point.y = 5;
-			tbox.lPoint.copy(xxyy(intersects[0].point));
-            tbox.rPoint.copy(xxyy(intersects[0].point));
-            tbox.updata();
-            tbox.mesh.visible = true;
-		}
-		else if(state === "move0" && num != "building") { //move0  XZ平面移動
-			controls.enableRotate = false; //鏡頭旋轉禁止
-			mouseDown = true;
-			pickNum = num;
-			backPos.num = num;
-			backPos.pos = boxes.boxes[num].position.clone();
-			changePos(num);
-			grid.visible = true;
-            gridXZ.visible = false;
-			grid.rotation.set(0, 0, 0);
-			grid.position.set(0, boxes.boxes[num].position.y, 0);
-			pickplane.rotation.set(0, 0, 0);
-			pickplane.position.set(0, boxes.boxes[num].position.y, 0);
-			boxes.moveDown(pickNum);
-		}
-		else if(state === "move1" && num != "building") { //move1  XY平面移動
-			controls.enableRotate = false; //鏡頭旋轉禁止
-			mouseDown = true;
-			pickNum = num;
-			backPos.num = num;
-			backPos.pos = boxes.boxes[num].position.clone();
-			changePos(num);
-			grid.visible = true;
-            gridXZ.visible = false;
-			grid.rotation.set(Math.PI / 2, 0, 0);
-			grid.position.set(0, 0, boxes.boxes[num].position.z);
-			pickplane.rotation.set(Math.PI / 2, 0, 0);
-			pickplane.position.set(0, 0, boxes.boxes[num].position.z);
-		}
-		else if(state === "move2" && num != "building") { //move2  YZ平面移動
-			controls.enableRotate = false; //鏡頭旋轉禁止
-			mouseDown = true;
-			pickNum = num;
-			backPos.num = num;
-			backPos.pos = boxes.boxes[num].position.clone();
-			changePos(num);
-			grid.visible = true;
-            gridXZ.visible = false;
-			grid.rotation.set(0, 0, Math.PI / 2);
-			grid.position.set(boxes.boxes[num].position.x, 0, 0);
-			pickplane.rotation.set(0, 0, Math.PI / 2);
-			pickplane.position.set(boxes.boxes[num].position.x, 0, 0);
-		}
-		else if(state === "delete" && num != "building") { //delete
-			boxes.delete(num);
-			backPos.num = -1;
-		}
-		else if(state === "stretch" && num != "building") { //stretch
-			controls.enableRotate = false;
-			let pos = xxyy(boxes.boxes[num].position.clone());
-			billBoard.position.x = pos.x;
-			billBoard.position.z = pos.z;
-			//rotateBillboard();
-			billBoard.visible = true;
-			pickNum = num;
-			mouseDown = true;
-		}
-		else if(state === "edge") {
-			controls.enableRotate = false;
-			let pos = xxyy(intersects[0].point);
-			bEdge.line.geometry.vertices[0].x = pos.x;
-			bEdge.line.geometry.vertices[0].y = Height;
-			bEdge.line.geometry.vertices[0].z = pos.z;
-			bEdge.visible(true);
-			gridXZ.visible = false;
-			mouseDown = true;
+	if(state === "play"){
+		onDocumentMouseDownPLAY(event);
+	}
+	else {
+		event.preventDefault();
+		mouse.x = (event.clientX / WW1) * 2 - 1 - 4/3;
+		mouse.y = -(event.clientY / HH1) * 2 + 1;
+		raycaster.setFromCamera(mouse, camera);
+		let intersects = raycaster.intersectObjects(pickables);
+		if (intersects.length > 0 && event.button === 0) {
+			num = intersects[0].object.name;
+			if(state === "building") { //building
+				controls.enableRotate = false; //鏡頭旋轉禁止
+				mouseDown = true;
+				intersects[0].point.y = 5;
+				tbox.lPoint.copy(xxyy(intersects[0].point));
+				tbox.rPoint.copy(xxyy(intersects[0].point));
+				tbox.updata();
+				tbox.mesh.visible = true;
+			}
+			else if(state === "move0" && num != "building") { //move0  XZ平面移動
+				controls.enableRotate = false; //鏡頭旋轉禁止
+				mouseDown = true;
+				pickNum = num;
+				backPos.num = num;
+				backPos.pos = boxes.boxes[num].position.clone();
+				changePos(num);
+				grid.visible = true;
+				gridXZ.visible = false;
+				grid.rotation.set(0, 0, 0);
+				grid.position.set(0, boxes.boxes[num].position.y, 0);
+				pickplane.rotation.set(0, 0, 0);
+				pickplane.position.set(0, boxes.boxes[num].position.y, 0);
+				boxes.moveDown(pickNum);
+			}
+			else if(state === "move1" && num != "building") { //move1  XY平面移動
+				controls.enableRotate = false; //鏡頭旋轉禁止
+				mouseDown = true;
+				pickNum = num;
+				backPos.num = num;
+				backPos.pos = boxes.boxes[num].position.clone();
+				changePos(num);
+				grid.visible = true;
+				gridXZ.visible = false;
+				grid.rotation.set(Math.PI / 2, 0, 0);
+				grid.position.set(0, 0, boxes.boxes[num].position.z);
+				pickplane.rotation.set(Math.PI / 2, 0, 0);
+				pickplane.position.set(0, 0, boxes.boxes[num].position.z);
+			}
+			else if(state === "move2" && num != "building") { //move2  YZ平面移動
+				controls.enableRotate = false; //鏡頭旋轉禁止
+				mouseDown = true;
+				pickNum = num;
+				backPos.num = num;
+				backPos.pos = boxes.boxes[num].position.clone();
+				changePos(num);
+				grid.visible = true;
+				gridXZ.visible = false;
+				grid.rotation.set(0, 0, Math.PI / 2);
+				grid.position.set(boxes.boxes[num].position.x, 0, 0);
+				pickplane.rotation.set(0, 0, Math.PI / 2);
+				pickplane.position.set(boxes.boxes[num].position.x, 0, 0);
+			}
+			else if(state === "delete" && num != "building") { //delete
+				boxes.delete(num);
+				backPos.num = -1;
+			}
+			else if(state === "stretch" && num != "building") { //stretch
+				controls.enableRotate = false;
+				let pos = xxyy(boxes.boxes[num].position.clone());
+				billBoard.position.x = pos.x;
+				billBoard.position.z = pos.z;
+				//rotateBillboard();
+				billBoard.visible = true;
+				pickNum = num;
+				mouseDown = true;
+			}
+			else if(state === "edgeR") {
+				controls.enableRotate = false;
+				let pos = xxyy(intersects[0].point);
+				bEdge.line.geometry.vertices[0].x = pos.x;
+				bEdge.line.geometry.vertices[0].y = Height;
+				bEdge.line.geometry.vertices[0].z = pos.z;
+				bEdge.visible(true);
+				gridXZ.visible = false;
+				mouseDown = true;
+			}
+			else if(state === "edgeG") {
+				controls.enableRotate = false;
+				let pos = xxyy(intersects[0].point);
+				bEdge.line.geometry.vertices[0].x = pos.x;
+				bEdge.line.geometry.vertices[0].y = Height;
+				bEdge.line.geometry.vertices[0].z = pos.z;
+				bEdge.visible(true);
+				gridXZ.visible = false;
+				mouseDown = true;
+			}
 		}
 	}
 }
@@ -174,7 +189,14 @@ function onDocumentMouseUp(event) {
 				mouseDown = false;
 				pickNum = -1;
 			}
-			else if(state === "edge") {
+			else if(state === "edgeR") {
+				controls.enableRotate = true;
+				gridXZ.visible = true;
+				bEdge.visible(false);
+				bEdge.push();
+				mouseDown = false;
+			}
+			else if(state === "edgeG") {
 				controls.enableRotate = true;
 				gridXZ.visible = true;
 				bEdge.visible(false);
@@ -263,7 +285,13 @@ function onDocumentMouseMove(event) {
 			else if(state === "stretch" && pickNum != -1) { //stretch
 				boxes.stretch(pickNum, xxyy(intersects[0].point));
 			}
-			else if(state === "edge") {
+			else if(state === "edgeR") {
+				bEdge.line.geometry.vertices[1].x = pos.x;
+				bEdge.line.geometry.vertices[1].y = Height;
+				bEdge.line.geometry.vertices[1].z = pos.z;
+				bEdge.updata();
+			}
+			else if(state === "edgeG") {
 				bEdge.line.geometry.vertices[1].x = pos.x;
 				bEdge.line.geometry.vertices[1].y = Height;
 				bEdge.line.geometry.vertices[1].z = pos.z;

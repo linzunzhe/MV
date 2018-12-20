@@ -18,7 +18,7 @@ class buildEdge {
     	this.rpoint.position.copy(this.geometry.vertices[0].clone());
         this.lpoint.position.copy(this.geometry.vertices[1].clone());
     	this.geometry.verticesNeedUpdate = true;
-    	this.line.geometry.computeLineDistances();
+    	this.line.computeLineDistances();
     }
     visible(boo){
     	this.line.visible = boo;
@@ -26,15 +26,27 @@ class buildEdge {
         this.lpoint.visible = boo;
     }
     push(){
-    	let point1 = new THREE.Mesh( new THREE.SphereBufferGeometry( 1.5, 18, 18 ), new THREE.MeshBasicMaterial( {color: 0xff3333} ));
-        point1.position.copy(this.rpoint.position.clone());
-		edge_line.add(point1);
-        let point2 = new THREE.Mesh( new THREE.SphereBufferGeometry( 1.5, 18, 18 ), new THREE.MeshBasicMaterial( {color: 0xff3333} ));
-        point2.position.copy(this.lpoint.position.clone());
-        edge_line.add(point2);
-        let line = new THREE.Line(this.geometry.clone(), new THREE.LineBasicMaterial({color: 0xffffff}));
-        edge_line.add(line);
-        //SAVE.save(this.rpoint.position.clone(), this.lpoint.position.clone());
-        /**************************/
+		if(state === "edgeR") {
+			let point1 = new THREE.Mesh( new THREE.SphereBufferGeometry( 1.5, 18, 18 ), new THREE.MeshBasicMaterial( {color: 0xff3333} ));
+			point1.position.copy(this.rpoint.position.clone());
+			edge_lineR.add(point1);
+			let point2 = new THREE.Mesh( new THREE.SphereBufferGeometry( 1.5, 18, 18 ), new THREE.MeshBasicMaterial( {color: 0xff3333} ));
+			point2.position.copy(this.lpoint.position.clone());
+			edge_lineR.add(point2);
+			let line = new THREE.Line(this.geometry.clone(), new THREE.LineBasicMaterial({color: 0xff8888}));
+			edge_lineR.add(line);
+			edgeR.push([point1.position.clone(), point2.position.clone()]);
+		}
+		else if(state === "edgeG") {
+			let point1 = new THREE.Mesh( new THREE.SphereBufferGeometry( 1.0, 18, 18 ), new THREE.MeshBasicMaterial( {color: 0x33ff33} ));
+			point1.position.copy(this.rpoint.position.clone());
+			edge_lineG.add(point1);
+			let point2 = new THREE.Mesh( new THREE.SphereBufferGeometry( 1.0, 18, 18 ), new THREE.MeshBasicMaterial( {color: 0x33ff33} ));
+			point2.position.copy(this.lpoint.position.clone());
+			edge_lineG.add(point2);
+			let line = new THREE.Line(this.geometry.clone(), new THREE.LineBasicMaterial({color: 0x88ff88}));
+			edge_lineG.add(line);
+			edgeG.push([point1.position.clone(), point2.position.clone()]);
+		}
     }
 }

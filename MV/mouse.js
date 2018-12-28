@@ -55,7 +55,10 @@ function rotateBillboard() {
 }
 
 function onDocumentMouseDown(event) {
-	if(state === "play"){
+	if(state === "point"){
+		Point();
+	}
+	else if(state === "play"){
 		onDocumentMouseDownPLAY(event);
 	}
 	else {

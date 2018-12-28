@@ -112,6 +112,16 @@ $("#play").click(function() {
 	testPlay();
 });
 
+$("#point").click(function() {
+	state = "point";
+	gridXZ.visible = !gridXZ.visible;
+	pickplane.visible = !pickplane.visible;
+});
+
+$("#setS").click(function() {
+	setSview();
+});
+
 $("#imgUrl").click(function() {
 	imgUpdata();
 });

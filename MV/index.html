@@ -94,6 +94,10 @@
 		<button id="save" style="width: 50px">SAVE</button>
 		<button id="play" style="width: 50px">PLAY</button>
 	</div>
+	<div style="border-width:2px;border-style:dashed;border-color:#FA55FC;">
+		<button id="point" style="width: 50px">point</button>
+		<button id="setS" style="width: 50px">setS</button>
+	</div>
 	<div style="border-width:2px;border-style:dashed;border-color:#AC55FF;">
 		URL:<input type="text" id="imgUrl" style="width:150px" value="https://i.imgur.com/tRsJ3ok.jpg"><br/>
 		size:<input type="text" id="imgSize" style="width: 50px" value = 1>
@@ -122,6 +126,7 @@
 <script src="others.js"></script>
 <script src="save.js"></script>
 <script src="testPlay.js"></script>
+<script src="point.js"></script>
 <script>
 window.focus();
 THREE.ImageUtils.crossOrigin = '';
@@ -132,6 +137,7 @@ function init() {
 	Scene();
 	window.addEventListener('resize', render, false);
     renderer.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
+	rendererW.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
     renderer.domElement.addEventListener('mouseup', onDocumentMouseUp, false);
     renderer.domElement.addEventListener('mousemove', onDocumentMouseMove, false);
     document.addEventListener('keydown', doKeyDown, false);

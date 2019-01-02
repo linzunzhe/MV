@@ -32,12 +32,6 @@ function init() {
   document.body.appendChild(renderer.domElement);
 
   /////////////////////////////////////////////////////////////////////
-  agentJ = new AgentJ (randomStart(), size);
-  agentK = new AgentK (randomStart(), size);
-  
-  agentJ.setEnemy (agentK);
-  agentK.setEnemy (agentJ);
-
   
   // scene grid [-400,400]x[-400,400]
   var gridXZ = new THREE.GridHelper(800, 80, 'red', 'white');
@@ -50,11 +44,11 @@ function init() {
   	let size = 10; // halfsize of agent
   	let randXZ = [-400 + Math.random()*800, -400 + Math.random()*800];
 //    agentJ = new AgentJ(new THREE.Vector3(randXZ[0], 0, randXZ[1]), size);
-    agentJ = new AgentJ(new THREE.Vector3(500, 0, 0), size);
-
-  	randXZ = [-400 + Math.random()*800, -400 + Math.random()*800];
-    agentK = new AgentK(new THREE.Vector3(200,0,-200), size);
-
+    agentJ = new AgentJ (randomStart(), size);
+	agentK = new AgentK (randomStart(), size);
+  
+	agentJ.setEnemy (agentK);
+	agentK.setEnemy (agentJ);
 }
 
 
@@ -84,7 +78,7 @@ function render() {
 function randomStart() {
 	var pos = new THREE.Vector3();
 	var done = false;
-	
+	console.log(scene);
 	do {
 		pos.x = -400 + Math.random()*800;
 		pos.y = 0;

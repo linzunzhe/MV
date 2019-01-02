@@ -150,3 +150,4 @@ class Agent {
 	  }
   }
 }
+export {Agent};

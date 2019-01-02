@@ -1,5 +1,4 @@
 import {scene} from './threemain.js';
-import {Obstacle} from './obstacle.js';
 function agentMesh (size, colorName='red') {
 	// mesh facing +x
 	let geometry = new THREE.Geometry();
@@ -73,10 +72,6 @@ class Agent {
 		}
 	}
 	this.vel.add(this.force.clone().multiplyScalar(dt*100));//加速啦~~~
-	let bomb = new THREE.Vector3();
-	bomb.copy(this.pos.clone());
-	bomb.sub(this.vel.clone().multiplyScalar(dt));
-	scene.obstacles.push (new Obstacle (new THREE.Vector3 (bomb.x, bomb.y, bomb.z), 10));//攻擊啦~~~
 
 	// Euler's method       
     this.vel.add(this.force.clone().multiplyScalar(dt));

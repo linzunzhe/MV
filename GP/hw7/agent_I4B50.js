@@ -74,7 +74,7 @@ class Agent {
 	let bomb = new THREE.Vector3();
 	bomb.copy(this.pos.clone());
 	bomb.sub(this.vel.clone().multiplyScalar(dt));
-	scene.obstacles.push (new Obstacle (new THREE.Vector3 (bomb.x, bomb.y, bomb.z), 10));//攻擊啦~~~
+	//scene.obstacles.push (new Obstacle (new THREE.Vector3 (bomb.x, bomb.y, bomb.z), 10));//攻擊啦~~~
 
 	// Euler's method       
     this.vel.add(this.force.clone().multiplyScalar(dt));

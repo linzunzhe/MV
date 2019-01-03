@@ -25,7 +25,7 @@ $("#Sview").click(function() {
 });
 
 /*設定專用視角，暫定，之後要改掉*/
-$("#S").click(function() {
+$("#Set").click(function() {
 	ScameraPos.copy(cameraW.position.clone());
 });
 
@@ -103,8 +103,21 @@ $("#clear").click(function() {
 	edgeG = [];
 });
 
-$("#save").click(function() {
-	save();
+$("#setX").click(function() {
+	state = "setX";
+});
+
+$("#setY").click(function() {
+	state = "setY";
+});
+
+$("#setZ").click(function() {
+	state = "setZ";
+});
+
+$("#reset").click(function() {
+	old_cameraW.set( 500, 500, 500);
+	cameraW.position.set( 500, 500, 500);
 });
 
 $("#play").click(function() {
@@ -112,14 +125,8 @@ $("#play").click(function() {
 	testPlay();
 });
 
-$("#point").click(function() {
-	state = "point";
-	gridXZ.visible = !gridXZ.visible;
-	pickplane.visible = !pickplane.visible;
-});
-
-$("#setS").click(function() {
-	setSview();
+$("#save").click(function() {
+	save();
 });
 
 $("#imgUrl").click(function() {

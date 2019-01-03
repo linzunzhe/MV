@@ -1,4 +1,5 @@
 var camera, cameraW, cameraX, cameraY, cameraZ, cameraHUD, cameraHUD2, cameraHUD3;
+var old_cameraW = new THREE.Vector3( 500, 500, 500);
 var renderer, rendererW, rendererX, rendererY, rendererZ;
 var scene, sceneHUD, sceneHUD2, sceneHUD3;
 var controls, halfSize = 100, controls2;//controls2: 右下角小視窗調整專用視角用
@@ -42,11 +43,11 @@ function Scene() {
     $("#container_z").append(rendererZ.domElement);
 	
 	/*canera*/
-	camera = new THREE.OrthographicCamera(-halfSize, halfSize, halfSize, -halfSize, -100, 1000);
+	camera = new THREE.OrthographicCamera(-halfSize, halfSize, halfSize, -halfSize, -100, 10000);
     camera.position.set(500, 500, 500);
     //camera.lookAt(scene.position);
     /**************camera********************/
-    cameraW = new THREE.OrthographicCamera(-halfSize, halfSize, halfSize, -halfSize, -100, 1000);
+    cameraW = new THREE.OrthographicCamera(-halfSize, halfSize, halfSize, -halfSize, -100, 10000);
   	cameraW.position.set(500, 500, 500);
     cameraW.lookAt(scene.position);
     

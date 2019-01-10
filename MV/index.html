@@ -72,7 +72,6 @@
 		<button id="delete" title = "delete" style="width: 50px; height: 50px; background-image: url('https://i.imgur.com/ZQ9nBDh.png'); background-size: contain;"></button>
 		<button id="stretch" title = "stretch" style="width: 50px; height: 50px; background-image: url('https://i.imgur.com/2Tnas0O.png'); background-size: contain;"></button>
 		<button id="Sview" title = "Sview" style="width: 50px; height: 50px; background-image: url('https://i.imgur.com/G5qEiRR.png'); background-size: contain;"></button>
-		<button id="S" style="width: 25px">S</button>
 	</div>
 	<div style="border-width:2px;border-style:dashed;border-color:#55ACFF;">
 		<button id="move0" title = "move0" style="width: 50px; height: 50px; background-image: url('https://i.imgur.com/hT0B5cq.png'); background-size: contain;"></button>
@@ -95,8 +94,9 @@
 		<button id="play" style="width: 50px">PLAY</button>
 	</div>
 	<div style="border-width:2px;border-style:dashed;border-color:#FA55FC;">
-		<button id="point" style="width: 50px">point</button>
-		<button id="setS" style="width: 50px">setS</button>
+		<button id="Axes" style="width: 50px">axes</button>
+		<button id="reset" style="width: 50px">reset</button>
+		<button id="Set" style="width: 50px">Set</button>
 	</div>
 	<div style="border-width:2px;border-style:dashed;border-color:#AC55FF;">
 		URL:<input type="text" id="imgUrl" style="width:150px" value="https://i.imgur.com/tRsJ3ok.jpg"><br/>
@@ -126,7 +126,6 @@
 <script src="others.js"></script>
 <script src="save.js"></script>
 <script src="testPlay.js"></script>
-<script src="point.js"></script>
 <script>
 window.focus();
 THREE.ImageUtils.crossOrigin = '';
@@ -137,7 +136,6 @@ function init() {
 	Scene();
 	window.addEventListener('resize', render, false);
     renderer.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
-	rendererW.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
     renderer.domElement.addEventListener('mouseup', onDocumentMouseUp, false);
     renderer.domElement.addEventListener('mousemove', onDocumentMouseMove, false);
     document.addEventListener('keydown', doKeyDown, false);
@@ -165,6 +163,7 @@ function init() {
 function animate() {
 	controls.update();
 	controls2.update();
+	//setW();
 	if(state === "play")animatePLAY();
 	render();
     requestAnimationFrame(animate);

@@ -24,11 +24,6 @@ $("#Sview").click(function() {
     camera.position.copy(ScameraPos.clone());
 });
 
-/*設定專用視角，暫定，之後要改掉*/
-$("#S").click(function() {
-	ScameraPos.copy(cameraW.position.clone());
-});
-
 $("#move0").click(function() {
 	changeButtonImage(4);
 	state = "move0";
@@ -103,8 +98,20 @@ $("#clear").click(function() {
 	edgeG = [];
 });
 
-$("#save").click(function() {
-	save();
+$("#Axes").click(function() {
+	state = "Axes";
+	axes.visible = !axes.visible;
+});
+
+/*設定專用視角，暫定，之後要改掉*/
+$("#Set").click(function() {
+	ScameraPos.copy(cameraW.position.clone());
+});
+
+$("#reset").click(function() {
+	old_cameraW.set( 500, 500, 500);
+	cameraW.position.set( 500, 500, 500);
+	axes.position.set( 0, 0, 0);
 });
 
 $("#play").click(function() {
@@ -112,14 +119,8 @@ $("#play").click(function() {
 	testPlay();
 });
 
-$("#point").click(function() {
-	state = "point";
-	gridXZ.visible = !gridXZ.visible;
-	pickplane.visible = !pickplane.visible;
-});
-
-$("#setS").click(function() {
-	setSview();
+$("#save").click(function() {
+	save();
 });
 
 $("#imgUrl").click(function() {

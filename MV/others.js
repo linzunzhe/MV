@@ -8,6 +8,7 @@ var button_img = [];
 var posSetX, posSetZ;
 var flag, ida;
 var ScameraPos = new THREE.Vector3( 500, 500, 500);
+var axes;
 
 function Others() {
 	tbox = new tBox();
@@ -87,6 +88,10 @@ function Others() {
 	flag = ida.ida;
 	ida.ida.visible = false;
 	scene.add(flag);
+	
+	axes = new THREE.AxisHelper(50);
+	axes.visible = false;
+	scene.add(axes);
 }
 
 function buildBill() {

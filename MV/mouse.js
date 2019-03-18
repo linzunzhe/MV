@@ -103,6 +103,7 @@ function onDocumentMouseDown(event) {
 				grid.position.set(0, 0, boxes.boxes[num].position.z);
 				pickplane.rotation.set(Math.PI / 2, 0, 0);
 				pickplane.position.set(0, 0, boxes.boxes[num].position.z);
+				boxes.moveDown(pickNum);
 			}
 			else if(state === "move2" && num != "building") { //move2  YZ平面移動
 				controls.enableRotate = false; //鏡頭旋轉禁止
@@ -117,6 +118,7 @@ function onDocumentMouseDown(event) {
 				grid.position.set(boxes.boxes[num].position.x, 0, 0);
 				pickplane.rotation.set(0, 0, Math.PI / 2);
 				pickplane.position.set(boxes.boxes[num].position.x, 0, 0);
+				boxes.moveDown(pickNum);
 			}
 			else if(state === "delete" && num != "building") { //delete
 				boxes.delete(num);

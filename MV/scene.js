@@ -140,7 +140,7 @@ function Scene() {
 }
 
 function setImgPlane( x, y) {
-	imgPlane = new THREE.Mesh(new THREE.PlaneGeometry( x / 10 * imgPlaneSize, y / 10 * imgPlaneSize), new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture('https://i.imgur.com/tRsJ3ok.jpg')}));
+	imgPlane = new THREE.Mesh(new THREE.PlaneGeometry( x / 10 * imgPlaneSize, y / 10 * imgPlaneSize), new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture($("#imgUrl").val())}));
 	imgPlane.z = -10;
 	sceneHUD3.add(imgPlane);
 }

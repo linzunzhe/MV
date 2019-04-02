@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+#container_m {
+  background: pink;
+  position: absolute;
+  top: 10%;
+  left: 0%;
+  width: 60vw;
+  height: 90vh;
+}
+
+#container_1 {
+  background: yellow;
+  position: absolute;
+  top: 0%;
+  left: 60%;
+  width: 20vw;
+  height: 25vh;
+}
+
+#container_2 {
+  background: blue;
+  position: absolute;
+  top: 0%;
+  left: 80%;
+  width: 20vw;
+  height: 25vh;
+}
+
+#container_3 {
+  background: green;
+  position: absolute;
+  top: 25%;
+  left: 60%;
+  width: 20vw;
+  height: 25vh;
+}
+
+#container_4 {
+  background: cyan;
+  position: absolute;
+  top: 25%;
+  left: 80%;
+  width: 20vw;
+  height: 25vh;
+}
+
+#container_5 {
+  background: #888888;
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  width: 40vw;
+  height: 50vh;
+}
+
+#info {
+	background: red;
+    position: absolute;
+    top: 0%;
+	left: 0%;
+	width: 60vw;
+	height: 10vh;
+    text-align: center;
+    color: #ffff00
+}
+
+body {
+    overflow: hidden;
+}
+
+</style>
+</head>
+<body>
+<!--  版面配置 -->
+<div id="info">
+	hw2
+    <br/>室內設計模型 （1）<button id="BGM" style="width: 58px">bgm</button><br/>
+	<a href="https://imgur.com/x20mnGG">設計圖</a>
+	攝像頭:
+    <button id="camera1" style="width: 25px">1</button>
+	<button id="camera2" style="width: 25px">2</button>
+	<button id="camera3" style="width: 25px">3</button>
+	<button id="camera4" style="width: 25px">4</button>
+	電源:
+	<button id="toggle" style="width: 58px">toggle</button>
+	<div id="slider" style="width:150px;position: absolute;top: 50%;left: 70%;"></div>
+</div>
+<div id="container_m"></div>
+<div id="container_1"></div>
+<div id="container_2"></div>
+<div id="container_3"></div>
+<div id="container_4"></div>
+<div id="container_5"></div>
+
+<audio id="backgroundsound" autoplay loop style="display:none">
+<source src="https://linzunzhe.github.io/MV/GP/bgm07.wav" type='audio/wav'>
+</audio>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/94/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="hw2/scene.js"></script>
+<script src="hw2/building.js"></script>
+<script src="hw2/buildlight.js"></script>
+<script src="hw2/tree.js"></script>
+<script src="hw2/buildviewpoints.js"></script>
+<script src="hw2/buildsofa.js"></script>
+<script>
+var backgroundsound = document.getElementById ('backgroundsound'), toggle = false;;
+window.focus();
+THREE.ImageUtils.crossOrigin = '';
+
+$("#BGM").click(function() {
+    if(toggle)backgroundsound.pause();
+    else backgroundsound.play();
+    toggle = !toggle
+});
+
+$("#camera1").click(function() {
+    cameraS = 1;
+	camera[5] = camera[cameraS];
+});
+
+$("#camera2").click(function() {
+    cameraS = 2;
+	camera[5] = camera[cameraS];
+});
+
+$("#camera3").click(function() {
+    cameraS = 3;
+	camera[5] = camera[cameraS];
+});
+
+$("#camera4").click(function() {
+    cameraS = 4;
+	camera[5] = camera[cameraS];
+});
+
+$("#toggle").click(function() {
+    for(let i = 0; i < 53; i++)lamp[i].toggle();
+});
+
+$( function() {
+    $( "#slider" ).slider({
+		range: false,
+		min: 0,
+		max: 200,
+		values: [100],
+		slide: function( event, ui ) {
+			NL = ui.values[0];
+		}
+    });
+});
+
+init();
+animate();
+
+function init() {
+	window.addEventListener('resize', onWindowResize, false);
+	Scene();
+	Building();
+	BuildLight();
+	build_XmasTree();
+	BuildViewPoints();
+	BuildSofa();
+}
+ 
+function animate() {
+	render();
+	turnVP();
+	checkLamp();
+    requestAnimationFrame(animate);
+}
+
+</script>
+</body>
+</html>

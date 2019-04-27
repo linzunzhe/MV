@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#info {
+	background: red;
+    position: absolute;
+    top: 0%;
+	left: 0%;
+	width: 50vw;
+	height: 10vh;
+    text-align: center;
+    color: #ffff00
+}
+
+#container_m {
+  background: pink;
+  position: absolute;
+  top: 10%;
+  left: 0%;
+  width: 50vw;
+  height: 90vh;
+}
+
+#container_a {
+  <!--background: url("https://i.imgur.com/CUC401l.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;-->
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  width: 35vw;
+  height: 25vh;
+}
+
+#container_b {
+  background: orange;
+  position: absolute;
+  padding: 10px;
+  top: 25%;
+  left: 50%;
+  width: 35vw;
+  height: 25vh;
+}
+
+#container_1 {
+  background: yellow;
+  position: absolute;
+  top: 0%;
+  left: 85%;
+  width: 15vw;
+  height: 20vh;
+}
+
+#container_2 {
+  background: blue;
+  position: absolute;
+  top: 20%;
+  left: 85%;
+  width: 15vw;
+  height: 20vh;
+}
+
+#container_3 {
+  background: green;
+  position: absolute;
+  top: 40%;
+  left: 85%;
+  width: 15vw;
+  height: 20vh;
+}
+
+#container_4 {
+  background: cyan;
+  position: absolute;
+  top: 60%;
+  left: 85%;
+  width: 15vw;
+  height: 20vh;
+}
+
+#container_5 {
+  background: #888888;
+  position: absolute;
+  top: 80%;
+  left: 85%;
+  width: 15vw;
+  height: 20vh;
+}
+
+#container_x {
+  background: #aaaaaa;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 35vw;
+  height: 50vh;
+}
+
+body {
+    overflow: hidden;
+}
+
+</style>
+</head>
+<body>
+<!--  版面配置 -->
+<div id="info">
+	hw3
+    <br/>Art Gallery Design<br/>
+	<button id="BGM" style="width: 58px">bgm</button>
+	攝像頭:
+	<input type="button" id="left" style="background: red;width: 0;height: 0;border-style: solid;border-width: 10px 20px 10px 0;border-color: transparent #ffff00 transparent transparent;"></input>
+    <select id="sel" style="height: 20px;">
+		<option value="1" selected>監視器--1</option>
+		<option value="2">監視器--2</option>
+		<option value="3">監視器--3</option>
+		<option value="4">監視器--4</option>
+		<option value="5">監視器--5</option>
+		<option value="17">boxG</option>
+		<option value="14">circleG</option>
+		<option value="16">coneG</option>
+		<option value="12">cylinderG</option>
+		<option value="13">dodecahedronG</option>
+		<option value="10">icosahedronG</option>
+		<option value="22">latheG</option>
+		<option value="7">octahedronG</option>
+		<option value="9">planeG</option>
+		<option value="11">ringG</option>
+		<option value="19">shapeG</option>
+		<option value="18">sphereG</option>
+		<option value="8">tetrahedronG</option>
+		<option value="21">torusG</option>
+		<option value="20">torusknotG</option>
+		<option value="15">tubeG</option>
+	</select>
+	<input type="button" id="right" style="background: red;width: 0;height: 0;border-style: solid;border-width: 10px 0 10px 20px;border-color: transparent transparent transparent #ffff00 ;"></input>
+</div>
+<div id="container_m"></div>
+<div id="container_a">
+	<img src="https://i.imgur.com/CUC401l.png" style="width:540px;height:200px;position: absolute;top: 0%;left: 50%;" usemap="#ImageMap">
+	<map name="ImageMap">
+		<area shape="circle" id='c1' coords="440,171,12" href="#">
+		<area shape="circle" id='c2' coords="440,30,12" href="#">
+		<area shape="circle" id='c3' coords="306,72,12" href="#">
+		<area shape="circle" id='c4' coords="88,169,12" href="#">
+		<area shape="circle" id='c5' coords="89,31,12" href="#">
+	</map>
+</div>
+<div id="container_b"><a id="convas" style="font-size: 28px; font-weight: weight;">。。。請點選畫作。。。</a><br/><table border="1" width="95%"><tr><td><a id="convas2" style="font-size: 24px;"></a></td></tr></table></div>
+<div id="container_1"></div>
+<div id="container_2"></div>
+<div id="container_3"></div>
+<div id="container_4"></div>
+<div id="container_5"></div>
+<div id="container_x"></div>
+<audio id="backgroundsound" autoplay loop style="display:none">
+<source src="https://linzunzhe.github.io/MV/GP/bgm07.wav" type='audio/wav'>
+</audio>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/94/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="hw2/scene2.js"></script>
+<script src="hw2/building.js"></script>
+<script src="hw2/buildlight.js"></script>
+<script src="hw2/tree.js"></script>
+<script src="hw2/buildviewpoints2.js"></script>
+<script src="hw2/buildsofa.js"></script>
+<script src="hw2/picker.js"></script>
+<script src="hw2/buildpicture.js"></script>
+<script>
+var backgroundsound = document.getElementById ('backgroundsound'), toggle = false;;
+window.focus();
+THREE.ImageUtils.crossOrigin = '';
+
+$("#BGM").click(function() {
+    if(toggle)backgroundsound.pause();
+    else backgroundsound.play();
+    toggle = !toggle
+});
+
+$("#sel").change(function() {
+    cameraS = $('#sel').val();
+	camera[6] = camera[cameraS];
+	if(cameraS > 6)Convas(cameraS);
+});
+
+$("#left").click(function() {
+	if(cameraS < 6) {
+		if(camera[6].fov > 10){
+			camera[6].fov -= 10;
+			camera[6].updateProjectionMatrix();
+		}
+	}
+    else if(cameraS > 6) {
+		if(camera[6].fov > 10){
+			camera[6].fov -= 10;
+			camera[6].updateProjectionMatrix();
+		}
+	}
+});
+
+$("#right").click(function() {
+	if(cameraS < 6) {
+		if(camera[6].fov < 80){
+			camera[6].fov += 10;
+			camera[6].updateProjectionMatrix();
+		}
+	}
+    else if(cameraS > 6) {
+		if(camera[6].fov < 100){
+			camera[6].fov += 10;
+			camera[6].updateProjectionMatrix();
+		}
+	}
+});
+
+$("#c1").click(function() {
+    cameraS = 1;
+	camera[6] = camera[cameraS];
+});
+
+$("#c2").click(function() {
+    cameraS = 2;
+	camera[6] = camera[cameraS];
+});
+
+$("#c3").click(function() {
+    cameraS = 3;
+	camera[6] = camera[cameraS];
+});
+
+$("#c4").click(function() {
+    cameraS = 4;
+	camera[6] = camera[cameraS];
+});
+
+$("#c5").click(function() {
+    cameraS = 5;
+	camera[6] = camera[cameraS];
+});
+
+init();
+animate();
+
+function init() {
+	window.addEventListener('resize', onWindowResize, false);
+	window.addEventListener('mousedown', onDocumentMouseDown, false);
+	window.addEventListener('mousemove', onDocumentMouseMove, false);
+	Scene();
+	Building();
+	BuildLight();
+	build_XmasTree();
+	BuildViewPoints();
+	BuildSofa();
+	BuildPicture();
+}
+ 
+function animate() {
+	render();
+	turnVP();
+    requestAnimationFrame(animate);
+}
+
+</script>
+</body>
+</html>

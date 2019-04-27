@@ -41,9 +41,9 @@ function render() {
 }
 
 function onWindowResize() {
-	WW1 = $("#container").innerWidth(), HH1 = $("#container").innerHeight();
-	WW2 = $("#container_w").innerWidth(), HH2 = $("#container_w").innerHeight();
-	WW3 = $("#container_y").innerWidth(), HH3 = $("#container_y").innerHeight();
+	WW1 = $("#container_m").innerWidth(), HH1 = $("#container_m").innerHeight();
+	WW2 = $("#container_1").innerWidth(), HH2 = $("#container_1").innerHeight();
+	WW3 = $("#container_5").innerWidth(), HH3 = $("#container_5").innerHeight();
 	
 	for(let i = 0; i < 5; i++) {
 		renderer[i].setSize( renderSize[i][0], renderSize[i][1]);

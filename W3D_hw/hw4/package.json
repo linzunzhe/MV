@@ -1,0 +1,17 @@
+{
+  "name": "circleRect",
+  "version": "1.0.0",
+  "description": "main.js will run a http server in http://127.0.0.1:1337",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "gcc circleRect.c",
+    "start": "node main.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2",
+    "shelljs": "^0.7.7"
+  }
+}

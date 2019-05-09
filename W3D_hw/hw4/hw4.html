@@ -9,8 +9,9 @@
 	</div>
 	<div style="float:left; margin-left: 10px; width:32vw;font-size:24px;">Current Configuration:<br/><br/>
 	  Radius:<div id="slider" style="width:100%;"></div><br/>
-	  Sound:<input id = "CSound"type="checkbox"style="width:24px;height:24px"><br/><br/>
+	  Sound:<input id = "CSound"type="checkbox"style="width:24px;height:24px" checked><br/><br/>
 	  <button id="toggle" style="width:100%; height:10%; text-align:center">Start/Pause</button>
+	  說明: 滑鼠左鍵移動矩形，右鍵移動圓形
 	  <p id='greeting'></p>
 	</div>
 	<audio id="collisionsound" style="display:none">
@@ -154,12 +155,14 @@
 						st = false;
 						circle.visible = false;
 						circle2.visible = true;
-						if(Cst)sound.play();
+						if(Cst){sound.play();console.log("123")}
+						$('#greeting').text("Collision!");
 					}
 					else if(data.output === "0"){
 						st = true;
 						circle.visible = true;
 						circle2.visible = false;
+						$('#greeting').text("");
 					}
 				}
 			});

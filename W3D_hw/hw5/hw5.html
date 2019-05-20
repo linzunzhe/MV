@@ -1,0 +1,390 @@
+<html>
+<head>
+<style>
+#container_m {
+  background: pink;
+  position: absolute;
+  top: 5%;
+  left: 25%;
+  width: 50vw;
+  height: 80vh;
+}
+
+#container_n {
+  background: pink;
+  position: absolute;
+  top: 72.5%;
+  left: 77.5%;
+  width: 20vw;
+  height: 20vh;
+}
+
+#container_1 {
+  background: yellow;
+  position: absolute;
+  top: 5%;
+  left: 2.5%;
+  width: 20vw;
+  height: 30vh;
+}
+
+#container_2 {
+  background: blue;
+  position: absolute;
+  top: 40%;
+  left: 2.5%;
+  width: 20vw;
+  height: 30vh;
+}
+
+#container_3 {
+  background: green;
+  position: absolute;
+  top: 5%;
+  left: 77.5%;
+  width: 20vw;
+  height: 30vh;
+}
+
+#container_4 {
+  background: cyan;
+  position: absolute;
+  top: 40%;
+  left: 77.5%;
+  width: 20vw;
+  height: 30vh;
+}
+#stepB {
+  position: absolute;
+  top: 87.5%;
+  left: 25%;
+  width: 50vw;
+  height: 10vh;
+}
+</style>
+<head>
+<body>
+<div id="container_m"></div>
+<div id="container_n"></div>
+<div id="container_1"></div>
+<div id="container_2"></div>
+<div id="container_3"></div>
+<div id="container_4"></div>
+<button id="stepB">Step</button>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/104/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<script src="https://jyunming-chen.github.io/tutsplus/js/KeyboardState.js"></script>
+<script>
+var camera, scene, renderer, render_n, camera_n, sceneR, sceneL;
+var omega=[0,0], theta=[0,0], R=[50,70];
+var car = [];
+var clock = new THREE.Clock();
+var step = [false,false];
+var start = false;
+var keyboard;
+var fuel=[100,100];
+var engine = [true,true];
+var myID, otherID;  // either 0 or 1
+var socket;
+var cameraL, rendererL, cameraR, rendererR, renderTargetL, renderTargetR;
+var sceneO, sceneF, cameraO, cameraF, TO, TF, rendererO, rendererF;
+
+$("#stepB").on('mousedown', function(e) {
+  console.log('mouse down')
+  socket.emit ('step', myID);
+  $(this).css("background-color", "gray");
+}).on('mouseup', function(e) {
+  console.log('mouse up')
+  socket.emit ('step', myID);
+  $(this).css("background-color", "white");
+});
+
+$(function () {
+	socket = io();
+	
+	socket.on ('id_set', function(msg) {
+		console.log ('i am ' + msg);
+
+		// setting myID in this client
+		myID = msg;
+		if (myID === 0)
+		  otherID = 1;
+		else
+		  otherID = 0;  
+
+		if (myID === 0) {
+			//$('#hud').text ('I am client 0')
+			console.log('I am client 0');
+		} else {
+			//$('#hud').text ('I am client 1')
+			console.log('I am client 1');
+		}
+	});
+
+	socket.on ('update_status', function (status) {
+		//console.log (status)
+		for (let i = 0; i < status.length; i++) {
+		  car[status[i].id].material.visible = true;   
+		  step[status[i].id] = status[i].step;
+		}
+	});
+});
+
+init();
+animate();
+
+function init() {
+  var ww = $("#container_m").innerWidth();
+  var hh = $("#container_m").innerHeight();
+  var wwn = $("#container_n").innerWidth();
+  var hhn = $("#container_n").innerHeight();
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(ww, hh);
+  renderer.setClearColor(0x888888);
+  $("#container_m").append(renderer.domElement);
+  
+  renderer_n = new THREE.WebGLRenderer();
+  renderer_n.setSize(wwn, hhn);
+  renderer_n.setClearColor(0x888888);
+  $("#container_n").append(renderer_n.domElement);
+  
+
+  ////////////////////////////////////////////////
+
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(50, ww / hh, 1, 1000);
+  //camera.position.set(0, 200, 300);
+  //camera.lookAt(scene.position);
+  camera_n = new THREE.PerspectiveCamera(50, wwn / hhn, 1, 1000);
+  camera_n.position.set(0,250,0);
+  camera_n.lookAt(scene.position);
+  
+  sceneR = new THREE.Scene();
+  sceneL = new THREE.Scene();
+  var wwrl = $("#container_1").innerWidth();
+  var hhrl = $("#container_1").innerHeight();
+  
+  cameraRR = new THREE.OrthographicCamera (-10,10,10,-10, 0,20);
+  cameraR = new THREE.PerspectiveCamera(50, wwrl / hhrl, 1, 1000);
+  //cameraR.position.set(0, 200, 0);
+  //cameraR.lookAt(scene.position);
+  rendererR = new THREE.WebGLRenderer();
+  rendererR.setSize(wwrl, hhrl);
+  rendererR.setClearColor(0x888888);
+  $("#container_3").append(rendererR.domElement);
+  
+  cameraLL = new THREE.OrthographicCamera (-10,10,10,-10, 0,20);
+  cameraL = new THREE.PerspectiveCamera(50, wwrl / hhrl, 1, 1000);
+  //cameraL.position.set(0, 200, 0);
+  //cameraL.lookAt(scene.position);
+  rendererL = new THREE.WebGLRenderer();
+  rendererL.setSize(wwrl, hhrl);
+  rendererL.setClearColor(0x888888);
+  $("#container_1").append(rendererL.domElement);
+  
+  renderTargetR = new THREE.WebGLRenderTarget(
+    1024, 1024, {
+      minFilter: THREE.LinearFilter,
+      magFilter: THREE.NearestFilter,
+      format: THREE.RGBFormat
+    }
+  );
+  
+  renderTargetL = new THREE.WebGLRenderTarget(
+    1024, 1024, {
+      minFilter: THREE.LinearFilter,
+      magFilter: THREE.NearestFilter,
+      format: THREE.RGBFormat
+    }
+  );
+  
+  rendererO = new THREE.WebGLRenderer();
+  rendererO.setSize(wwrl, hhrl);
+  rendererO.setClearColor(0xffffff);
+  $("#container_4").append(rendererO.domElement);
+  
+  rendererF = new THREE.WebGLRenderer();
+  rendererF.setSize(wwrl, hhrl);
+  rendererF.setClearColor(0xffffff);
+  $("#container_2").append(rendererF.domElement);
+  
+  sceneO = new THREE.Scene();
+  sceneF = new THREE.Scene();
+  
+  cameraO = new THREE.PerspectiveCamera(50, wwrl / hhrl, 1, 1000);
+  cameraF = new THREE.PerspectiveCamera(50, wwrl / hhrl, 1, 1000);
+  cameraO.position.set(0,50,0);
+  cameraO.lookAt(sceneO.position);
+  cameraF.position.set(0,50,0);
+  cameraF.lookAt(sceneF.position);
+  
+  planeR = new THREE.Mesh (new THREE.PlaneGeometry(20,20),
+  new THREE.MeshBasicMaterial({map:renderTargetR.texture, side:THREE.DoubleSide}));
+  sceneR.add (planeR);
+  planeR.rotation.y = Math.PI;
+  
+  planeL = new THREE.Mesh (new THREE.PlaneGeometry(20,20),
+  new THREE.MeshBasicMaterial({map:renderTargetL.texture, side:THREE.DoubleSide}));
+  sceneL.add (planeL);
+  planeL.rotation.y = Math.PI;
+  
+  car[0] = new THREE.Mesh(new THREE.BoxGeometry(10, 10,25), new THREE.MeshBasicMaterial({color:0xffaa88}));
+  scene.add(car[0]);
+  //car[0].material.visible = false;
+  car[1] = new THREE.Mesh(new THREE.BoxGeometry(10, 10,25), new THREE.MeshBasicMaterial({color:0x88aaff}));
+  scene.add(car[1]);
+  //car[1].material.visible = false;
+
+  camera.position.copy(car[0].localToWorld(new THREE.Vector3(0, 30, 0)));
+  camera.lookAt(car[0].localToWorld(new THREE.Vector3(0, 0, -30)));
+  var gridXZ = new THREE.GridHelper(200, 20, 'red', 'white');
+  scene.add(gridXZ);
+  
+  var bar = new THREE.Mesh(new THREE.BoxGeometry(20, 1, 1), new THREE.MeshBasicMaterial({color:0xff2222}));
+  bar.position.x = -10;
+  TO = new THREE.Object3D();
+  TO.add(bar.clone());
+  sceneO.add(TO);
+  TF = new THREE.Object3D();
+  TF.add(bar.clone());
+  sceneF.add(TF);
+  var cir = new THREE.Mesh(new THREE.CircleGeometry(25, 32), new THREE.MeshBasicMaterial({color:0x222222}));
+  cir.position.y = -5;
+  cir.rotation.x = -Math.PI/2;
+  sceneO.add(cir.clone());
+  sceneF.add(cir.clone());
+
+  //let controls = new THREE.OrbitControls(camera, renderer.domElement);
+  window.addEventListener('resize', onWindowResize, false);
+  /////////////
+  //theta = 0;
+  //omega = 0;
+  //R = 70;
+
+  //fuel = 100;
+
+  keyboard = new KeyboardState();
+}
+
+function onWindowResize() {
+  var ww = $("#container_m").innerWidth();
+  var hh = $("#container_m").innerHeight();
+
+  camera.aspect = ww / hh;
+  camera.updateProjectionMatrix();
+  renderer.setSize(ww, hh);
+  
+  var wwn = $("#container_n").innerWidth();
+  var hhn = $("#container_n").innerHeight();
+  
+  camera_n.aspect = wwn / hhn;
+  camera_n.updateProjectionMatrix();
+  renderer_n.setSize(wwn, hhn);
+  
+  var wwrl = $("#container_1").innerWidth();
+  var hhrl = $("#container_1").innerHeight();
+  
+  cameraR.aspect = wwrl / hhrl;
+  cameraR.updateProjectionMatrix();
+  rendererR.setSize(wwrl, hhrl);
+  
+  cameraL.aspect = wwrl / hhrl;
+  cameraL.updateProjectionMatrix();
+  rendererL.setSize(wwrl, hhrl);
+  
+  cameraO.aspect = wwrl / hhrl;
+  cameraO.updateProjectionMatrix();
+  rendererO.setSize(wwrl, hhrl);
+  
+  cameraF.aspect = wwrl / hhrl;
+  cameraF.updateProjectionMatrix();
+  rendererF.setSize(wwrl, hhrl);
+}
+
+function animate() {
+  //console.log(start);
+	keyboard.update();
+	if (keyboard.pressed("S"))
+		socket.emit ('step', myID);
+	//else
+	//	socket.emit ('step', myID);
+  
+  //console.log(step)
+	if(step[0] === true || step[1] === true)start = true;
+  requestAnimationFrame(animate);
+  render();
+	if(start){
+	dt = clock.getDelta();
+//console.log(theta[0]);
+	if(myID != undefined){
+		camera.position.copy(car[myID].localToWorld(new THREE.Vector3(0, 30, 0)));
+		camera.lookAt(car[myID].localToWorld(new THREE.Vector3(0, 0, -30)));
+		if (engine[myID]) {
+			theta[myID] += omega[myID] * dt;
+			car[myID].position.set(R[myID] * Math.cos(theta[myID]), 0, -R[myID] * Math.sin(theta[myID]))
+			car[myID].rotation.y = theta[myID];
+			cameraR.position.copy(car[myID].localToWorld(new THREE.Vector3(10, 15, -20)));
+			cameraR.lookAt(car[myID].localToWorld(new THREE.Vector3(10, 15, 0)));
+			cameraL.position.copy(car[myID].localToWorld(new THREE.Vector3(-10, 15, -20)));
+			cameraL.lookAt(car[myID].localToWorld(new THREE.Vector3(-10, 15, 0)));
+			if (step[myID]) {
+				omega[myID] += 0.1;
+				fuel[myID] -= 0.15;
+				if (omega[myID] > 4) omega[myID] = 4;
+			} else {
+				fuel[myID] -= 0.03;
+				omega[myID] -= 0.02;
+				if (omega[myID] < 0) omega[myID] = 0;
+			}
+		}
+		if (fuel[myID] < 0) {
+			engine[myID] = false;
+			fuel[myID] = 0;
+		}
+		TO.rotation.y = -Math.PI * (omega[myID]/4);
+		TF.rotation.y = -Math.PI * (fuel[myID]/100);
+	}
+	if(otherID != undefined){
+		if (engine[otherID]) {
+			theta[otherID] += omega[otherID] * dt;
+			car[otherID].position.set(R[otherID] * Math.cos(theta[otherID]), 0, -R[otherID] * Math.sin(theta[otherID]))
+			car[otherID].rotation.y = theta[otherID];
+			if (step[otherID]) {
+				omega[otherID] += 0.1;
+				fuel[otherID] -= 0.15;
+				if (omega[otherID] > 4) omega[otherID] = 4;
+			} else {
+				fuel[otherID] -= 0.03;
+				omega[otherID] -= 0.02;
+				if (omega[otherID] < 0) omega[otherID] = 0;
+			}
+		}
+		if (fuel[otherID] < 0) {
+			engine[otherID] = false;
+			fuel[otherID] = 0;
+		}
+	}
+	}
+}
+
+function render() {
+	renderer.render(scene, camera);
+	renderer_n.render(scene, camera_n);
+	if(start){
+		rendererR.setRenderTarget (renderTargetR);
+		rendererR.render (scene, cameraR); 
+		rendererR.setRenderTarget (null);
+		rendererR.render(sceneR, cameraRR);
+		rendererL.setRenderTarget (renderTargetL);
+		rendererL.render (scene, cameraL); 
+		rendererL.setRenderTarget (null);
+		rendererL.render(sceneL, cameraLL);
+	}
+	rendererO.render(sceneO, cameraO);
+	rendererF.render(sceneF, cameraF);
+}
+</script>
+</body>
+</html>

@@ -34,11 +34,12 @@
 //
 
 var camera, scene, renderer, light;
-var ball, ball2, plane;
+var ball1, ball2, plane;
 var clock = new THREE.Clock();
 var mouse = new THREE.Vector2();
 var gravity = new THREE.Vector3();
 var deviceInfo, gamma = 0, beta = 0;
+var wall = [[0,0,60,5],[0,-30,5,70],[60,0,5,60],[-60,0,5,60]];
 
 // class definitions here
 var Ball = function (c,x,y) {
@@ -74,6 +75,13 @@ var Ball = function (c,x,y) {
             this.pos.setZ (-90);
             this.vel.setZ (0);
         }
+		
+		for(let i=0;i<4;i++) {
+			if(this.pos.x <= wall[i][0]-wall[i][2]*2/3 && Math.abs(this.pos.z-wall[i][1]) <= (10+wall[i][3]))if((wall[i][0]-this.pos.x) <= (10+wall[i][2])){this.pos.setX(wall[i][0]-wall[i][2]-10); this.vel.setX (0);}
+			else if(this.pos.x >= wall[i][0]+wall[i][2]*2/3 && Math.abs(this.pos.z-wall[i][1]) <= (10+wall[i][3]))if((this.pos.x-wall[i][0]) <= (10+wall[i][2])){this.pos.setX(wall[i][0]+wall[i][2]+10); this.vel.setX (0);}
+			if(this.pos.z <= wall[i][1]-wall[i][3]*2/3 && Math.abs(this.pos.x-wall[i][0]) <= (10+wall[i][2]))if((wall[i][1]-this.pos.z) <= (10+wall[i][3])){this.pos.setZ(wall[i][1]-wall[i][3]-10); this.vel.setZ (0);}
+			else if(this.pos.z >= wall[i][1]+wall[i][3]*2/3 && Math.abs(this.pos.x-wall[i][0]) <= (10+wall[i][2]))if((this.pos.z-wall[i][1]) <= (10+wall[i][3])){this.pos.setZ(wall[i][1]+wall[i][3]+10); his.vel.setZ (0);}
+		}
     }
 }
 
@@ -183,7 +191,7 @@ function init() {
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     scene.add(camera);
 
-    ball = new Ball(0xff1234,-30,-30);
+    ball1 = new Ball(0xff1234,-30,-30);
 	ball2 = new Ball(0x12ffff,30,-30);
 
     light = new THREE.PointLight(0xffffff);
@@ -238,7 +246,6 @@ function Contact(ball, plane) {
 
     ball.pos.setY(0); // ball position correction
     let normalW = new THREE.Vector3(0, 1, 0); // local plane normal
- 	
 	ball.force.copy (gravity.projectOnPlane (normalW));
 }
 
@@ -250,17 +257,15 @@ function animate() {
     // gamma/beta: in degree
     // device beta (DeviceX) correspond to world X
     // device gamma (DeviceY) correspond to world -Z
-	//beta=5,gamma=-10;
+	//beta=5,gamma=5;
 	var a = new THREE.Euler(-beta*Math.PI/180, 0, gamma*Math.PI/180, 'XYZ');
     gravity = new THREE.Vector3(0, -180, 0);
     gravity.applyEuler(a);
-	 
-    Contact(ball, plane);
-	let dt = clock.getDelta();
-    ball.update(dt);
 	
+	let dt = clock.getDelta();
+    Contact(ball1, plane);
+    ball1.update(dt);
 	Contact(ball2, plane);
-	//let dt = clock.getDelta();
     ball2.update(dt);
 
     requestAnimationFrame(animate);

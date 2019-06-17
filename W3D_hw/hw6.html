@@ -88,7 +88,7 @@ var Ball = function (c,x,y) {
 				//	return (((max_x * max_x + min_y * min_y) < 100) ? 1 : 0);
 				//else 					/* R due West of circle */
 				//	return(Math.abs(max_x) < 10 ? 1 : 0);
-				{if(Math.abs(max_x) < 10){this.pos.setX(wall[i][0]+wall[i][2]+10); this.vel.setX (0);}}
+				{if(max_y >= 0 && min_y <= 0 && Math.abs(max_x) < 10){this.pos.setX(wall[i][0]+wall[i][2]+10); this.vel.setX (0);}}
 			else if (min_x > 0)  	/* R to right of circle center */
 				//if (max_y < 0) 	/* R in lower right corner */
 				//	return (((min_x * min_x + max_y * max_y) < 100) ? 1 : 0);
@@ -96,7 +96,7 @@ var Ball = function (c,x,y) {
 				//	return (((min_x * min_x + min_y * min_y) < 100) ? 1 : 0);
 				//else 				/* R due East of circle */
 				//	return ((min_x < 10) ? 1 : 0);
-				{if(min_x < 10){this.pos.setX(wall[i][0]-wall[i][2]-10); this.vel.setX (0);}}
+				{if(max_y >= 0 && min_y <= 0 && min_x < 10){this.pos.setX(wall[i][0]-wall[i][2]-10); this.vel.setX (0);}}
 			else				/* R on circle vertical centerline */
 				//if (max_y < 0) 	/* R due South of circle */
 				//	return ((Math.abs(max_y) < 10) ? 1 : 0);
@@ -104,7 +104,7 @@ var Ball = function (c,x,y) {
 				//	return ((min_y < 10) ? 1 : 0);
 				//else 				/* R contains circle centerpoint */
 				//	return(1);
-				{
+				if(max_y >= 0 && min_y <= 0){
 					if(max_y < 0){if(Math.abs(max_y) < 10){this.pos.setZ(wall[i][1]-wall[i][3]-10); this.vel.setZ (0);}}
 					else if(min_y > 0){if(min_y < 10){this.pos.setZ(wall[i][1]+wall[i][3]+10); his.vel.setZ (0);}}
 				}
@@ -288,7 +288,7 @@ function animate() {
     // gamma/beta: in degree
     // device beta (DeviceX) correspond to world X
     // device gamma (DeviceY) correspond to world -Z
-	beta=-5,gamma=-5;
+	//beta=-5,gamma=-5;
 	var a = new THREE.Euler(-beta*Math.PI/180, 0, gamma*Math.PI/180, 'XYZ');
     gravity = new THREE.Vector3(0, -180, 0);
     gravity.applyEuler(a);

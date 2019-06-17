@@ -105,8 +105,9 @@ var Ball = function (c,x,y) {
 				//else 				/* R contains circle centerpoint */
 				//	return(1);
 				{
-					if(max_y < 0){if(Math.abs(max_y) < 10){this.pos.setZ(wall[i][1]-wall[i][3]-10); this.vel.setZ (0);}}
-					else if(min_y > 0){if(min_y < 10){this.pos.setZ(wall[i][1]+wall[i][3]+10); this.vel.setZ (0);}}
+					if(max_y < 0){if(Math.abs(max_y) < 10){this.pos.setZ(wall[i][1]+wall[i][3]+10); this.vel.setZ (0);}}
+					else if(min_y > 0){if(min_y < 10){this.pos.setZ(wall[i][1]-wall[i][3]-10); this.vel.setZ (0);}}
+					else alert("now");
 				}
 			//if(this.pos.x+10 <= wall[i][0]-wall[i][2]*2/3 && Math.abs(this.pos.z-wall[i][1]) <= (10+wall[i][3]))if((wall[i][0]-this.pos.x) <= (10+wall[i][2])){this.pos.setX(wall[i][0]-wall[i][2]-10); this.vel.setX (0);}
 			//else if(this.pos.x+10 >= wall[i][0]+wall[i][2]*2/3 && Math.abs(this.pos.z-wall[i][1]) <= (10+wall[i][3]))if((this.pos.x-wall[i][0]) <= (10+wall[i][2])){this.pos.setX(wall[i][0]+wall[i][2]+10); this.vel.setX (0);}
@@ -288,7 +289,7 @@ function animate() {
     // gamma/beta: in degree
     // device beta (DeviceX) correspond to world X
     // device gamma (DeviceY) correspond to world -Z
-	//beta=-5,gamma=-5;
+	//beta=5,gamma=0;
 	var a = new THREE.Euler(-beta*Math.PI/180, 0, gamma*Math.PI/180, 'XYZ');
     gravity = new THREE.Vector3(0, -180, 0);
     gravity.applyEuler(a);

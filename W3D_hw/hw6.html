@@ -204,16 +204,12 @@ function buildWall(){
 $('#red').click( function() {
 	ball1.pos.set(-30, 0, -30);
 	ball1.mesh.position.copy(ball1.pos);
-    ball1.vel.set();
-    ball1.force.set();
 	ball1.fall = false;
 });
 
 $('#blue').click( function() {
 	ball2.pos = new THREE.Vector3(30, 0, -30);
 	ball2.mesh.position.copy(ball2.pos);
-    ball2.vel = new THREE.Vector3();
-    ball2.force = new THREE.Vector3();
 	ball2.fall = false;
 });
 

@@ -226,8 +226,8 @@ function init() {
 	// with normal = (0,1,0)
     scene = new THREE.Scene();
 
-    camera = new THREE.OrthographicCamera(-120, 120, 120, -120, 10, 2000);
-    camera.position.set(0, 450, 0);
+    camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 6000);
+    camera.position.set(0, 300, 0);
     camera.up.set(0, 0, -1);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     scene.add(camera);
@@ -291,14 +291,14 @@ function Contact(ball, plane) {
 }
 
 function animate() {
-    //deviceInfo.innerHTML = '[gamma: ' + gamma.toFixed(2) + '], [beta: ' 
-    //    + beta.toFixed(2) +']';
+    deviceInfo.innerHTML = '[gamma: ' + gamma.toFixed(2) + '], [beta: ' 
+        + beta.toFixed(2) +']';
 
     // euler: in radian
     // gamma/beta: in degree
     // device beta (DeviceX) correspond to world X
     // device gamma (DeviceY) correspond to world -Z
-	//beta=-5,gamma=-5;
+	//beta=-5,gamma=0;
 	var a = new THREE.Euler(-beta*Math.PI/180, 0, gamma*Math.PI/180, 'XYZ');
     gravity = new THREE.Vector3(0, -180, 0);
     gravity.applyEuler(a);

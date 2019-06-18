@@ -97,7 +97,7 @@ var Ball = function (c,x,y) {
 		//hole
 		for(let i=0;i<8;i++) {
 			let dis = (hole[i][0]-this.pos.x)*(hole[i][0]-this.pos.x)+(hole[i][1]-this.pos.z)*(hole[i][1]-this.pos.z);
-			if(dis < 100){
+			if(dis < 25){
 				this.pos.set(hole[i][0],0,hole[i][1]);
 				this.mesh.position.copy(this.pos);
 				this.fall = true;

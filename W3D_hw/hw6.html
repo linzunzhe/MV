@@ -23,8 +23,8 @@
 
 <body> 
 <div id='info'> Device Orientation <br/>
-	<button id="red" style="width: 50px">red</button>
-	<button id="blue" style="width: 50px">blue</button></div>
+	<button id="red" style="width: 100px">red</button>
+	<button id="blue" style="width: 100px">blue</button></div>
 <div id='deviceInfo'></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -309,7 +309,7 @@ function animate() {
 		ball1.update(dt);
 		let dis = (30-ball1.pos.x)*(30-ball1.pos.x)+(20-ball1.pos.z)*(20-ball1.pos.z);
 		if(dis < 25){
-			ball1.pos.set(hole[i][0],0,hole[i][1]);
+			ball1.pos.set(30,0,20);
 			ball1.mesh.position.copy(ball1.pos);
 			ball1.fall = true;
 			ball1.win = true;
@@ -321,7 +321,7 @@ function animate() {
 		ball2.update(dt);
 		let dis = (-30-ball2.pos.x)*(-30-ball2.pos.x)+(20-ball2.pos.z)*(20-ball2.pos.z);
 		if(dis < 25){
-			ball2.pos.set(hole[i][0],0,hole[i][1]);
+			ball2.pos.set(-30,0,20);
 			ball2.mesh.position.copy(ball2.pos);
 			ball2.fall = true;
 			ball2.win = true;

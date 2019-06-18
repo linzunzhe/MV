@@ -259,7 +259,6 @@ function init() {
 	});
 	
 	buildWall();
-	
 }
 
 /*
@@ -331,6 +330,16 @@ function animate() {
 		}
 	}
 	else ball2.falling();
+	
+	if(ball1.fall === false && ball2.fall === false) {
+		let dis = (ball1.pos.x-ball2.pos.x)*(ball1.pos.x-ball2.pos.x)+(ball1.pos.z-ball2.pos.z)*(ball1.pos.z-ball2.pos.z);
+		if(dis < 100){
+			ball1.pos.sub(ball1.vel.clone().multiplyScalar(dt));
+			ball1.mesh.position.copy(ball1.pos);
+			ball2.pos.sub(ball2.vel.clone().multiplyScalar(dt));
+			ball2.mesh.position.copy(ball2.pos);
+		}
+	}
 	
 	if(ball1.win === true && ball2.win === true) {
 		deviceInfo.innerHTML = 'You Win!!';

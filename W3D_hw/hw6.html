@@ -355,7 +355,6 @@ function animate() {
 			vec2.copy(ball2.vel.clone().projectOnVector(normal2.clone()));
 			vec2.x *= -1, vec2.z *= -1;
 			ball2.vel.copy(ball2.vel.clone().add(vec2.clone().add(vec2.clone())));
-			collisionSound.play();
 		}
 	}
 	

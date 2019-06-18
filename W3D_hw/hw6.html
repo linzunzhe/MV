@@ -211,7 +211,7 @@ $('#red').click( function() {
 });
 
 $('#blue').click( function() {
-	ball2.pos = new THREE.Vector3(-30, 0, -50);
+	ball2.pos = new THREE.Vector3(-30, 0, -60);
 	ball2.mesh.position.copy(ball2.pos);
 	ball2.fall = false;
 	ball2.win = false;
@@ -233,7 +233,7 @@ function init() {
     scene.add(camera);
 
     ball1 = new Ball(0xff1234,-30,-30);
-	ball2 = new Ball(0x12ffff,-30,-50);
+	ball2 = new Ball(0x12ffff,-30,-60);
 
     light = new THREE.PointLight(0xffffff);
     light.position.set(0, 300, 0);
@@ -300,7 +300,7 @@ function animate() {
     // gamma/beta: in degree
     // device beta (DeviceX) correspond to world X
     // device gamma (DeviceY) correspond to world -Z
-	//beta=20,gamma=25;
+	beta=20,gamma=0;
 	var a = new THREE.Euler(-beta*Math.PI/180, 0, gamma*Math.PI/180, 'XYZ');
     gravity = new THREE.Vector3(0, -180, 0);
     gravity.applyEuler(a);
@@ -333,7 +333,7 @@ function animate() {
 	
 	if(ball1.fall === false && ball2.fall === false) {
 		let dis = (ball1.pos.x-ball2.pos.x)*(ball1.pos.x-ball2.pos.x)+(ball1.pos.z-ball2.pos.z)*(ball1.pos.z-ball2.pos.z);
-		if(dis < 100){
+		if(dis < 400){
 			ball1.pos.sub(ball1.vel.clone().multiplyScalar(dt));
 			ball1.mesh.position.copy(ball1.pos);
 			ball2.pos.sub(ball2.vel.clone().multiplyScalar(dt));

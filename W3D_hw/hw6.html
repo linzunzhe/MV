@@ -339,7 +339,7 @@ function animate() {
 		let normal2 = new THREE.Vector3(-(ball1.pos.x - ball2.pos.x), 0, -(ball1.pos.z - ball2.pos.z));
 		let center = new THREE.Vector3();
 		center.copy(ball1.pos);
-		center.add(normal2.clone().normalize().multiplyScalar(ball1.radius));
+		center.add(normal2.clone().normalize().multiplyScalar(10));
 		let vec1 = new THREE.Vector3();
 		let vec2 = new THREE.Vector3();
 

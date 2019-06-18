@@ -22,7 +22,7 @@
 </head>
 
 <body> 
-<div id='info'> Device Orientation <br/>
+<div id='info'> Tilt Labyrinth <br/>
 	<button id="red" style="width: 100px">red</button>
 	<button id="blue" style="width: 100px">blue</button></div>
 <div id='deviceInfo'></div>
@@ -239,7 +239,7 @@ function init() {
     light.position.set(0, 300, 0);
     scene.add(light);
 
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x888888);
 
@@ -287,18 +287,21 @@ function Contact(ball, plane) {
 
     ball.pos.setY(0); // ball position correction
     let normalW = new THREE.Vector3(0, 1, 0); // local plane normal
-	ball.force.copy (gravity.projectOnPlane (normalW));
+	let k = gravity.projectOnPlane (normalW);
+	ball.force.copy (k);
+	camera.position.set( -k.x, 400, -k.z);
+	camera.lookAt(scene.position);
 }
 
 function animate() {
-    deviceInfo.innerHTML = '[gamma: ' + gamma + '], [beta: ' 
-        + beta +']';
+    //deviceInfo.innerHTML = '[gamma: ' + gamma + '], [beta: ' 
+    //    + beta +']';
 
     // euler: in radian
     // gamma/beta: in degree
     // device beta (DeviceX) correspond to world X
     // device gamma (DeviceY) correspond to world -Z
-	//beta=-5,gamma=0;
+	//beta=20,gamma=25;
 	var a = new THREE.Euler(-beta*Math.PI/180, 0, gamma*Math.PI/180, 'XYZ');
     gravity = new THREE.Vector3(0, -180, 0);
     gravity.applyEuler(a);

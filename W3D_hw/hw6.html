@@ -211,7 +211,7 @@ $('#red').click( function() {
 });
 
 $('#blue').click( function() {
-	ball2.pos = new THREE.Vector3(-30, 0, -60);
+	ball2.pos = new THREE.Vector3(30, 0, -30);
 	ball2.mesh.position.copy(ball2.pos);
 	ball2.fall = false;
 	ball2.win = false;
@@ -233,7 +233,7 @@ function init() {
     scene.add(camera);
 
     ball1 = new Ball(0xff1234,-30,-30);
-	ball2 = new Ball(0x12ffff,-30,-60);
+	ball2 = new Ball(0x12ffff,30,-30);
 
     light = new THREE.PointLight(0xffffff);
     light.position.set(0, 300, 0);
